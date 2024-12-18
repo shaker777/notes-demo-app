@@ -10,6 +10,7 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+    base: "/notes-demo-app/",
     define: {
         '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),
     },

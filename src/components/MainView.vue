@@ -18,7 +18,7 @@
             {{ entity.title }}
           </template>
           <template #column2="{ entity }">
-            <li v-for="(complete, i) in entity.comlete" :key="`${complete}-${i}`">
+            <li v-for="(complete, i) in entity.completed" :key="`${complete}-${i}`">
               {{ complete }}
             </li>
           </template>
@@ -50,7 +50,7 @@
     .then(async (response): Promise<void | null> => {
         processInformation.value = 'Данные загружены!'
 
-      const td = response.data.map(item => {return new TodoModel(item)})
+      const td = response.data.map((item:any) => {return new TodoModel(item)})
       setTodos(td)
       // console.log(td)
     })
