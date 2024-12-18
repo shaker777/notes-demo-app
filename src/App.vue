@@ -1,8 +1,20 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
+import useSettings from '@/hooks/useSettings'
+import HeaderView from "@/components/HeaderView.vue";
+import FooterView from "@/components/FooterView.vue";
+// import {onMounted} from "vue";
 
+const { showFooter } = useSettings();
+
+/*
+onMounted((): void => {
+  console.log('show footer: ', showFooter);
+});
+*/
+
+</script>
+<!--
 <template>
   <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
@@ -12,12 +24,19 @@ import HelloWorld from './components/HelloWorld.vue'
 
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/About">About</RouterLink>
       </nav>
     </div>
   </header>
 
   <RouterView />
+</template>
+-->
+
+<template>
+  <HeaderView title="Мои заметки"/>
+  <RouterView />
+  <FooterView v-if="showFooter" title="Vue SPA"/>
 </template>
 
 <style scoped>
@@ -60,7 +79,6 @@ nav a:first-of-type {
   header {
     display: flex;
     place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
   }
 
   .logo {
@@ -69,7 +87,7 @@ nav a:first-of-type {
 
   header .wrapper {
     display: flex;
-    place-items: flex-start;
+    flex-direction: column;
     flex-wrap: wrap;
   }
 

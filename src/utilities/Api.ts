@@ -1,0 +1,1 @@
+const apiTodoUrl = 'https://jsonplaceholder.typicode.com/todos'
