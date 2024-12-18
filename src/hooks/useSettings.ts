@@ -6,8 +6,8 @@ export default function useSettings() {
 
     const showFooter = computed(() => store.getShowFooter)
 
-    const updateShowFooter = (show: boolean): void => {
-        store.setShowFooter(show)
+    const updateShowFooter = (): void => {
+        store.toggleShowFooter()
     }
 
     return {

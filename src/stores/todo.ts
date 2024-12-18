@@ -49,7 +49,7 @@ export const useTodoStore = defineStore('todo', () => {
     }
     const updateTodoDone = (todoModel: { id: number; done: boolean }): void => {
         const index = state.todos.findIndex(todo => todo.id === todoModel.id)
-        state.todos[index].done = todoModel.done
+        state.todos[index].completed = todoModel.done
     }
 
     return {

@@ -24,8 +24,8 @@ export default function useTodos() {
         if (!title) {
             return
         }
-
-        const payload = new TodoModel(getNewId(), title, description, false)
+        const data = {id : getNewId(), title, competed: false, description}
+        const payload = new TodoModel(data)
 
         store.addTodo(payload)
         newTodoTitle.value = ''
@@ -38,6 +38,10 @@ export default function useTodos() {
 
     const updateTodo = (todo: TodoModel): void => {
         store.updateTodo(todo)
+    }
+
+    const setTodos = (todos: TodoModel[]): void => {
+        store.setTodos(todos)
     }
 
     const updateTodoDone = (id: number, done: boolean): void => {
@@ -56,6 +60,7 @@ export default function useTodos() {
     }
 
     return {
+        setTodos,
         addTodo,
         newTodoTitle,
         newTodoDescription,

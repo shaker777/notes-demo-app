@@ -8,13 +8,12 @@
   defineProps<{
     title: string
   }>()
-
 </script>
 
 <style>
 #footer {
-  background: #b8ecda;
-  color: #000000;
+  background: rgb(45, 196, 143);
+  color: #fff;
   padding: 01rem;
   position: fixed;
   bottom: 0;
@@ -22,7 +21,9 @@
   margin: 0;
   height: 60px;
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   z-index: 999;
 }
 </style>

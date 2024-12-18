@@ -3,15 +3,9 @@ import { RouterLink, RouterView } from 'vue-router'
 import useSettings from '@/hooks/useSettings'
 import HeaderView from "@/components/HeaderView.vue";
 import FooterView from "@/components/FooterView.vue";
-// import {onMounted} from "vue";
 
 const { showFooter } = useSettings();
-
-/*
-onMounted((): void => {
-  console.log('show footer: ', showFooter);
-});
-*/
+const title:string = `Vue Notes SPA ${__APP_VERSION__}`
 
 </script>
 <!--
@@ -20,8 +14,6 @@ onMounted((): void => {
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it! 2025!!!" />
-
       <nav>
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/About">About</RouterLink>
@@ -36,7 +28,7 @@ onMounted((): void => {
 <template>
   <HeaderView title="Мои заметки"/>
   <RouterView />
-  <FooterView v-if="showFooter" title="Vue SPA"/>
+  <FooterView v-if="showFooter" :title="title"/>
 </template>
 
 <style scoped>

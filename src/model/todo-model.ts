@@ -3,7 +3,7 @@ export class TodoModel {
     public title: string;
     public completed: boolean;
     public description?: string;
-    constructor(item: TodoModel) {
+    constructor(item: any) {
         this.id = item.id;
         this.title = item.title;
         this.completed = item.completed;

@@ -1,18 +1,28 @@
 <template>
   <main :class="showFooter ? 'main-container withFooter' : 'main-container noFooter'">
-    <div class="col-md-12">
-      <div class="card mb-4 box-shadow">
-        <div class="card-body" v-if="isLoading === true">
+    <div>
+      <div>
+        <div v-if="isLoading === true">
           <p id="process-information">
             {{ processInformation }}
           </p>
         </div>
-        <div id="todos-list" class="card-body" v-else>
-          <h2>Todos data:</h2>
-          <p v-for="todo in todos" :key="todo.title">
-            {{ todo.title }}
-          </p>
-        </div>
+        <table-view
+        :headers="headers"
+        :data="todos"
+        v-else>
+          <template #column0="{ entity }">
+            {{ entity.id }}
+          </template>
+          <template #column1="{ entity }">
+            {{ entity.title }}
+          </template>
+          <template #column2="{ entity }">
+            <li v-for="(complete, i) in entity.comlete" :key="`${complete}-${i}`">
+              {{ complete }}
+            </li>
+          </template>
+        </table-view>
       </div>
     </div>
   </main>
@@ -23,13 +33,16 @@
   import {onMounted, ref} from 'vue'
   import {TodoModel} from "@/model/todo-model";
   import useSettings from '@/hooks/useSettings'
+  import useTodos from '@/hooks/useTodos'
+  import TableView from "./TableView.vue";
 
   const { showFooter } = useSettings();
   const isLoading = ref<boolean>(true)
   const processInformation = ref<string>('Загрузка данных...')
-  const todos = ref<TodoModel>()
-
+  const { todos, setTodos } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
+
+  const headers:string[] = ['№', 'Название','Сделано', 'Actions']
 
   onMounted((): void => {
     axios
@@ -37,8 +50,9 @@
     .then(async (response): Promise<void | null> => {
         processInformation.value = 'Данные загружены!'
 
-        todos.value = response.data.map(item => {return new TodoModel(item)})
-        // console.log(todos)
+      const td = response.data.map(item => {return new TodoModel(item)})
+      setTodos(td)
+      // console.log(td)
     })
     .then(async (): Promise<void | null> => {
         processInformation.value = 'Обработка данных'
@@ -52,8 +66,6 @@
     })
   })
 
-  // height: calc(100vh - 120px);
-  // :class="showFooter ? 'main-container withFooter' : 'main-container noFooter'"
 </script>
 
 <style scoped>
@@ -61,7 +73,6 @@
   width: 100%;
   position: absolute;
   top: 60px;
-  display: flex;
   justify-content: center;
   overflow: scroll;
 }
@@ -76,5 +87,6 @@
 
 #process-information {
   padding-top: 30px;
+  text-align: center;
 }
 </style>

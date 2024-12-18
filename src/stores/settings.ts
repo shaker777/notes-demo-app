@@ -9,12 +9,12 @@ export const useSettingsStore = defineStore('settings', () => {
 
     const getShowFooter = computed((): boolean | null => state.showFooter)
 
-    const setShowFooter = (show: boolean): void => {
-        state.showFooter = show
+    function toggleShowFooter(): void {
+        state.showFooter = !state.showFooter
     }
 
     return {
         getShowFooter,
-        setShowFooter
+        toggleShowFooter
     }
 })
