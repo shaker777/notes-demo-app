@@ -4,7 +4,8 @@ import {computed, reactive} from 'vue'
 
 export const useSettingsStore = defineStore('settings', () => {
     const state = reactive<SettingsState>({
-        showFooter: true
+        showFooter: true,
+        filterCompleted: false
     }) as SettingsState
 
     const getShowFooter = computed((): boolean | null => state.showFooter)
@@ -13,8 +14,23 @@ export const useSettingsStore = defineStore('settings', () => {
         state.showFooter = !state.showFooter
     }
 
+    const getFilterCompleted = computed((): boolean | null => state.filterCompleted)
+
+    function toggleFilterCompleted(): void {
+        state.filterCompleted = !state.filterCompleted
+        //console.log('state.filterCompleted: ', state.filterCompleted)
+    }
+
+    function setFilterCompleted(value:boolean): void {
+        state.filterCompleted = value
+        //console.log('state.filterCompleted: ', state.filterCompleted)
+    }
+
     return {
         getShowFooter,
-        toggleShowFooter
+        toggleShowFooter,
+        getFilterCompleted,
+        toggleFilterCompleted,
+        setFilterCompleted
     }
 })

@@ -9,7 +9,9 @@
         </div>
         <table-view
         :headers="headers"
-        :data="todos"
+        :data="filterCompleted? todosCompeted: todos"
+        :filterCompleted="filterCompleted"
+        :toogle-filter="handleToggleFilter"
         v-else>
           <template #column0="{ entity }">
             {{ entity.id }}
@@ -18,9 +20,7 @@
             {{ entity.title }}
           </template>
           <template #column2="{ entity }">
-            <li v-for="(complete, i) in entity.completed" :key="`${complete}-${i}`">
-              {{ complete }}
-            </li>
+            {{ entity.completed }}
           </template>
         </table-view>
       </div>
@@ -35,14 +35,40 @@
   import useSettings from '@/hooks/useSettings'
   import useTodos from '@/hooks/useTodos'
   import TableView from "./TableView.vue";
+  // import router from '@/router'
+  import { watch } from "vue";
+  import { useRoute } from "vue-router";
 
-  const { showFooter } = useSettings();
+  const route = useRoute();
+
+  const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted } = useSettings();
   const isLoading = ref<boolean>(true)
   const processInformation = ref<string>('Загрузка данных...')
-  const { todos, setTodos } = useTodos();
+  const { todos, todosCompeted, setTodos } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
   const headers:string[] = ['№', 'Название','Сделано', 'Actions']
+
+  function handleToggleFilter () {
+    updateFilterCompleted()
+    /*
+    if (filterCompleted === true) {
+      console.log("test filterCompleted on ");
+      //router.push({path: '/', query: {completed: 'true'}})
+    } else {
+      console.log("test filterCompleted off");
+      //router.push({path: '/'})
+    }
+     */
+  }
+
+  watch(
+  () => route.fullPath,
+  async () => {
+    console.log("route fullPath updated: ", route.fullPath);
+    setFilterCompleted(route.fullPath === '/?completed=true' )
+  }
+  );
 
   onMounted((): void => {
     axios
@@ -52,7 +78,9 @@
 
       const td = response.data.map((item:any) => {return new TodoModel(item)})
       setTodos(td)
-      // console.log(td)
+      if (route.fullPath === '/?completed=true') {
+        updateFilterCompleted()
+      }
     })
     .then(async (): Promise<void | null> => {
         processInformation.value = 'Обработка данных'

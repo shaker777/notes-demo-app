@@ -6,23 +6,27 @@
         <th
         v-for="(header, i) in headers"
         :key="`${header}${i}`"
-        class="header-item"
+        :class="i=== 2 ? 'header-item-cell header-item-filter' : 'header-item-cell'"
+        @click="toogleFilter"
         >
-          {{ header }}
+          <p :class="(i=== 2 && filterCompleted) ? 'header-item-text filter-active' : 'header-item-text'">{{ header }}</p>
         </th>
       </tr>
       </thead>
       <tbody>
       <tr
       v-for="entity in data"
-      :key="`entity-${entity.title}`"
-      :class="entity.completed ? 'table-rows' : 'table-rows-completed'"
+      :key="`entity-${entity.id}`"
+      :class="entity.completed ? 'table-rows-completed' : 'table-rows'"
       >
         <td
         v-for="(header, i) in headers"
         :key="`${header}-${i}`"
         >
           <slot :name="`column${i}`" :entity="entity"></slot>
+          <div v-if="i === 3">
+            <p>actions</p>
+          </div>
         </td>
       </tr>
       </tbody>
@@ -35,8 +39,11 @@
 
   defineProps<{
     headers: string[],
-    data: TodoModel[]
+    data: TodoModel[],
+    filterCompleted: boolean,
+    toogleFilter:() => void
   }>()
+
 </script>
 
 <style scoped>
@@ -64,11 +71,24 @@ td {
   text-align: left;
 }
 
-.header-item {
-  padding: 30px 20px;
-  font-size: 12px;
+.header-item-cell {
+  padding: 15px;
   background-color: #b8ecda;
+}
+
+.header-item-filter {
+  cursor: pointer;
+}
+
+.header-item-text {
+  font-size: 12px;
   text-transform: uppercase;
+  padding: 5px;
+}
+
+.filter-active {
+  background-color: rgb(45, 196, 143);
+  border-radius: 8px;
 }
 
 .table-rows:nth-child(odd) {

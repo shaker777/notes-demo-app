@@ -9,6 +9,8 @@ export default function useTodos() {
 
     const todos = computed(() => store.getTodos)
 
+    const todosCompeted = computed(() => store.getTodos.filter(item => item.completed))
+
     const getNewId = (): number => {
         const todosSlice = store.getTodos.slice(-1)
         if (todosSlice.length > 0) {
@@ -68,6 +70,7 @@ export default function useTodos() {
         updateTodoDone,
         removeTodo,
         todos,
+        todosCompeted,
         getTodoById
     }
 }

@@ -10,8 +10,21 @@ export default function useSettings() {
         store.toggleShowFooter()
     }
 
+    const filterCompleted = computed(() => store.getFilterCompleted)
+
+    const updateFilterCompleted = (): void => {
+        store.toggleFilterCompleted()
+    }
+
+    const setFilterCompleted = (value:boolean): void => {
+        store.setFilterCompleted(value)
+    }
+
     return {
         showFooter,
-        updateShowFooter
+        updateShowFooter,
+        filterCompleted,
+        updateFilterCompleted,
+        setFilterCompleted
     }
 }
