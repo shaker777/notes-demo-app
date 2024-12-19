@@ -5,7 +5,7 @@ import HeaderView from "@/components/HeaderView.vue";
 import FooterView from "@/components/FooterView.vue";
 
 const { showFooter } = useSettings();
-const title:string = `Vue Notes SPA ${__APP_VERSION__}`
+const title:string = `Vue Notes SPA ${__APP_VERSION__} Новогоднее издание`
 
 </script>
 <!--

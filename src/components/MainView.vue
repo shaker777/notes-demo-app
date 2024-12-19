@@ -12,15 +12,11 @@
         :data="filterCompleted? todosCompeted: todos"
         :filterCompleted="filterCompleted"
         :toogle-filter="handleToggleFilter"
+        :delete-item="handleDeleteAction"
+        :check-item="handleDoneAction"
         v-else>
-          <template #column0="{ entity }">
-            {{ entity.id }}
-          </template>
           <template #column1="{ entity }">
-            {{ entity.title }}
-          </template>
-          <template #column2="{ entity }">
-            {{ entity.completed }}
+            {{ capitalizeFirstLetter(entity.title) }}
           </template>
         </table-view>
       </div>
@@ -38,13 +34,14 @@
   // import router from '@/router'
   import { watch } from "vue";
   import { useRoute } from "vue-router";
+  import capitalizeFirstLetter from "@/utilities/utilities";
 
   const route = useRoute();
 
   const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted } = useSettings();
   const isLoading = ref<boolean>(true)
   const processInformation = ref<string>('Загрузка данных...')
-  const { todos, todosCompeted, setTodos } = useTodos();
+  const { todos, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
   const headers:string[] = ['№', 'Название','Сделано', 'Actions']
@@ -62,11 +59,25 @@
      */
   }
 
+  function handleDeleteAction(todo:TodoModel) {
+    console.log('delete: ', todo.id)
+    removeTodo(todo.id)
+  }
+
+  function handleDoneAction(todo:TodoModel) {
+    updateTodoDone(todo.id, todo.completed)
+  }
+
+  function handleEditAction(todo:TodoModel) {
+    console.log('handleEditAction')
+    //updateTodo(todo)
+  }
+
   watch(
   () => route.fullPath,
   async () => {
     console.log("route fullPath updated: ", route.fullPath);
-    setFilterCompleted(route.fullPath === '/?completed=true' )
+    setFilterCompleted(route.fullPath.includes('completed=true')) // === '/?completed=true'
   }
   );
 

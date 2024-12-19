@@ -14,21 +14,33 @@
       </tr>
       </thead>
       <tbody>
-      <tr
-      v-for="entity in data"
-      :key="`entity-${entity.id}`"
-      :class="entity.completed ? 'table-rows-completed' : 'table-rows'"
-      >
-        <td
-        v-for="(header, i) in headers"
-        :key="`${header}-${i}`"
+        <tr
+        v-for="(entity, index) in data"
+        :key="`entity-${entity.id}`"
+        :class="entity.completed ? 'table-rows-completed' : 'table-rows'"
         >
-          <slot :name="`column${i}`" :entity="entity"></slot>
-          <div v-if="i === 3">
-            <p>actions</p>
-          </div>
-        </td>
-      </tr>
+          <td
+          v-for="(header, i) in headers"
+          :key="`${header}-${i}`"
+          :class="i === 1 ? 'cell-title' : ''"
+          >
+            <slot :name="`column${i}`" :entity="entity"></slot>
+            <div v-if="i === 0">
+              <p>{{ index + 1 }}</p>
+            </div>
+            <div v-if="i === 2">
+              <input type="checkbox"
+                     class="custom-checkbox"
+                     :id="'customCheck' + entity.id"
+                     v-model="entity.completed"
+                     @change="checkItem(entity)"
+              >
+            </div>
+            <div v-if="i === 3">
+              <p @click="deleteItem(entity)">actions</p>
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -40,8 +52,10 @@
   defineProps<{
     headers: string[],
     data: TodoModel[],
-    filterCompleted: boolean,
-    toogleFilter:() => void
+    filterCompleted: boolean | null,
+    toogleFilter:() => void,
+    deleteItem:(todo:TodoModel) => void,
+    checkItem:(todo:TodoModel) => void
   }>()
 
 </script>
@@ -92,7 +106,7 @@ td {
 }
 
 .table-rows:nth-child(odd) {
-  background-color: rgb(250, 250, 250);
+  background-color: rgb(253, 251, 249);
 }
 
 .table-rows-completed {
@@ -105,5 +119,10 @@ td {
 
 .table-rows:nth-child(n):hover {
   opacity: 0.75;
+}
+
+.custom-checkbox {
+  accent-color: rgb(45, 196, 143);
+  cursor: pointer;
 }
 </style>

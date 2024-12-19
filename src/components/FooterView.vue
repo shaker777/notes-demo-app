@@ -10,9 +10,9 @@
   }>()
 </script>
 
-<style>
+<style scoped>
 #footer {
-  background: rgb(45, 196, 143);
+  background: rgb(180 17 17);
   color: #fff;
   padding: 01rem;
   position: fixed;
