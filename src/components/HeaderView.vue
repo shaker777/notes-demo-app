@@ -1,21 +1,26 @@
 <template>
   <header id="header">
+    <div>
+      <IconButton icon="info"
+                  :dark="false"
+                  @click="updateShowFooter"/>
+    </div>
     <h1 class="title">{{title}}</h1>
     <div>
-      <input type="button"
-             class="button"
-             @click="updateShowFooter"
-             value="show footer"
-      >
+      <IconButton icon="plus"
+                  :dark="false"
+                  @click="showAddNoteModal"/>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
 import useSettings from '@/hooks/useSettings'
+import IconButton from "./IconButton.vue"
 
   defineProps<{
-    title: string
+    title: string,
+    showAddNoteModal:() => void
   }>()
 
 const { updateShowFooter } = useSettings();

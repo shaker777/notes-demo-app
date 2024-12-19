@@ -14,6 +14,7 @@
         :toogle-filter="handleToggleFilter"
         :delete-item="handleDeleteAction"
         :check-item="handleDoneAction"
+        :edit-item="handleEditAction"
         v-else>
           <template #column1="{ entity }">
             {{ capitalizeFirstLetter(entity.title) }}
@@ -44,7 +45,7 @@
   const { todos, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
-  const headers:string[] = ['№', 'Название','Сделано', 'Actions']
+  const headers:string[] = ['№', 'Название','Сделано', '']
 
   function handleToggleFilter () {
     updateFilterCompleted()
@@ -59,17 +60,16 @@
      */
   }
 
-  function handleDeleteAction(todo:TodoModel) {
-    console.log('delete: ', todo.id)
-    removeTodo(todo.id)
+  function handleDeleteAction(todoId: number) {
+    removeTodo(todoId)
   }
 
   function handleDoneAction(todo:TodoModel) {
     updateTodoDone(todo.id, todo.completed)
   }
 
-  function handleEditAction(todo:TodoModel) {
-    console.log('handleEditAction')
+  function handleEditAction(todoId: number) {
+    console.log('handleEditAction: ', todoId)
     //updateTodo(todo)
   }
 

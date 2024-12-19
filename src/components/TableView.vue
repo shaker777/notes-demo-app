@@ -9,7 +9,11 @@
         :class="i=== 2 ? 'header-item-cell header-item-filter' : 'header-item-cell'"
         @click="toogleFilter"
         >
-          <p :class="(i=== 2 && filterCompleted) ? 'header-item-text filter-active' : 'header-item-text'">{{ header }}</p>
+          <div v-if="i === 2" :class="filterCompleted ? 'filter-active flexContainer filter-container' : 'flexContainer filter-container'">
+            <p class="header-item-text">{{ header }}</p>
+            <font-awesome-icon icon="filter" class="filter-icon"/>
+          </div>
+          <p class="header-item-text" v-else>{{ header }}</p>
         </th>
       </tr>
       </thead>
@@ -36,8 +40,13 @@
                      @change="checkItem(entity)"
               >
             </div>
-            <div v-if="i === 3">
-              <p @click="deleteItem(entity)">actions</p>
+            <div v-if="i === 3" class="buttonsContainer">
+              <IconButton icon="pencil"
+                          :dark="true"
+                          @click="editItem(entity.id)"/>
+              <IconButton icon="trash"
+                          :dark="true"
+                          @click="deleteItem(entity.id)"/>
             </div>
           </td>
         </tr>
@@ -48,13 +57,15 @@
 
 <script setup lang="ts">
   import {TodoModel} from "@/model/todo-model";
+  import IconButton from "./IconButton.vue"
 
   defineProps<{
     headers: string[],
     data: TodoModel[],
     filterCompleted: boolean | null,
     toogleFilter:() => void,
-    deleteItem:(todo:TodoModel) => void,
+    deleteItem:(todoId:number) => void,
+    editItem:(todoId:number) => void,
     checkItem:(todo:TodoModel) => void
   }>()
 
@@ -125,4 +136,25 @@ td {
   accent-color: rgb(45, 196, 143);
   cursor: pointer;
 }
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.flexContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-container {
+
+}
+.filter-icon {
+  font-size: 10px;
+}
+
 </style>

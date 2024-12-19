@@ -7,6 +7,9 @@ import FooterView from "@/components/FooterView.vue";
 const { showFooter } = useSettings();
 const title:string = `Vue Notes SPA ${__APP_VERSION__} Новогоднее издание`
 
+function handleShowAddNoteModal () {
+  console.log('handleShowAddNoteModal')
+}
 </script>
 <!--
 <template>
@@ -26,7 +29,7 @@ const title:string = `Vue Notes SPA ${__APP_VERSION__} Новогоднее из
 -->
 
 <template>
-  <HeaderView title="Мои заметки"/>
+  <HeaderView title="Мои заметки" :show-add-note-modal="handleShowAddNoteModal"/>
   <RouterView />
   <FooterView v-if="showFooter" :title="title"/>
 </template>
