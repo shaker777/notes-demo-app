@@ -1,12 +1,16 @@
 <template>
   <div class="back">
-    <div class="container" role="dialog">
-      <IconButton icon="times"
+    <div class="container">
+      <div class="header">
+        <div style="width: 30px; height: 30px; margin: auto; margin-left: 0;"/>
+        <h2 class="title">{{ title }}</h2>
+        <IconButton icon="times"
                   :dark="true"
                   @click="onCancel"
-      class="close-button"/>
-      <h2 class="title">{{ title }}</h2>
-      <div class="buttons-container">
+                  class="close-button"/>
+      </div>
+      <p class="message">{{ message }}</p>
+      <div class="footer">
         <TextButton title="Удалить"
                     :destructive="true"
                     @click="onConfirm"
@@ -25,6 +29,7 @@ import IconButton from "./IconButton.vue"
 import TextButton from "./TextButton.vue"
 defineProps<{
   title: string,
+  message: string,
   onConfirm:() => void,
   onCancel:() => void
 }>()
@@ -52,25 +57,37 @@ defineProps<{
   overflow:hidden;
 }
 
-.title {
+.message {
   text-align: center;
   font-size: 1.2rem;
   padding: 1rem;
 }
 
-.buttons-container {
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 10px;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.close-button {
+  margin: auto;
+  margin-right: 0;
+}
+
+.footer {
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 10px;
   margin-bottom: 10px;
-}
-
-.close-button {
-  margin: auto;
-  margin-right: 10px;
-  margin-top: 10px;
 }
 
 .action-button {

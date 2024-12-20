@@ -21,7 +21,8 @@
           </template>
         </table-view>
         <ConfirmModal  v-if="showConfirmModal === true"
-                       title="Удалить заметку?"
+                       title="Удаление"
+                       message="Удалить заметку?"
                        :on-confirm="onDeleteConfirmed"
                        :on-cancel="handleCloseConfirmModal"/>
       </div>
@@ -50,7 +51,7 @@
   const { todos, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
-  const headers:string[] = ['№', 'Название','Сделано', '']
+  const headers:string[] = ['№', 'Заметка','Сделано', '']
 
   const showConfirmModal = ref<boolean>(false)
   const itemToDeleteId = ref<number | undefined>()
@@ -73,7 +74,7 @@
   }
 
   function onDeleteConfirmed () {
-    if (itemToDeleteId) {
+    if (itemToDeleteId.value) {
       removeTodo(itemToDeleteId.value)
       showConfirmModal.value = false
     }

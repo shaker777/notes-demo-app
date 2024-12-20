@@ -12,7 +12,8 @@ const router = createRouter({
     {
       path: '/notfound',
       name: 'notfound',
-      component: () => import('@/components/NotFoundView.vue'),
+        // @ts-ignore’
+      component: (): Promise<any> => import('@/components/NotFoundView.vue'),
     },
   ],
 })

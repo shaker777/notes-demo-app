@@ -34,8 +34,10 @@ export default function useTodos() {
         newTodoDescription.value = ''
     }
 
-    const removeTodo = (id: number): void => {
-        store.removeTodo(id)
+    const removeTodo = (id: number | undefined): void => {
+        if (id) {
+            store.removeTodo(id)
+        }
     }
 
     const updateTodo = (todo: TodoModel): void => {
