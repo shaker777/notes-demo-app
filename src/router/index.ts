@@ -10,9 +10,9 @@ const router = createRouter({
       component: MainView,
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('@/components/HelloWorld.vue'),
+      path: '/notfound',
+      name: 'notfound',
+      component: () => import('@/components/NotFoundView.vue'),
     },
   ],
 })

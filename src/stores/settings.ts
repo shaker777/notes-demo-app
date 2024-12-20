@@ -4,7 +4,7 @@ import {computed, reactive} from 'vue'
 
 export const useSettingsStore = defineStore('settings', () => {
     const state = reactive<SettingsState>({
-        showFooter: true,
+        showFooter: localStorage.getItem('showFooter') === 'true',
         filterCompleted: false
     }) as SettingsState
 
@@ -12,6 +12,7 @@ export const useSettingsStore = defineStore('settings', () => {
 
     function toggleShowFooter(): void {
         state.showFooter = !state.showFooter
+        localStorage.setItem('showFooter', state.showFooter ? 'true' :  'false');
     }
 
     const getFilterCompleted = computed((): boolean | null => state.filterCompleted)

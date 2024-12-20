@@ -20,6 +20,10 @@
             {{ capitalizeFirstLetter(entity.title) }}
           </template>
         </table-view>
+        <ConfirmModal  v-if="showConfirmModal === true"
+                       title="Удалить заметку?"
+                       :on-confirm="onDeleteConfirmed"
+                       :on-cancel="handleCloseConfirmModal"/>
       </div>
     </div>
   </main>
@@ -32,6 +36,7 @@
   import useSettings from '@/hooks/useSettings'
   import useTodos from '@/hooks/useTodos'
   import TableView from "./TableView.vue";
+  import ConfirmModal from "./ConfirmModal.vue";
   // import router from '@/router'
   import { watch } from "vue";
   import { useRoute } from "vue-router";
@@ -47,6 +52,9 @@
 
   const headers:string[] = ['№', 'Название','Сделано', '']
 
+  const showConfirmModal = ref<boolean>(false)
+  const itemToDeleteId = ref<number | undefined>()
+
   function handleToggleFilter () {
     updateFilterCompleted()
     /*
@@ -59,9 +67,16 @@
     }
      */
   }
-
   function handleDeleteAction(todoId: number) {
-    removeTodo(todoId)
+    showConfirmModal.value = true
+    itemToDeleteId.value = todoId
+  }
+
+  function onDeleteConfirmed () {
+    if (itemToDeleteId) {
+      removeTodo(itemToDeleteId.value)
+      showConfirmModal.value = false
+    }
   }
 
   function handleDoneAction(todo:TodoModel) {
@@ -71,6 +86,11 @@
   function handleEditAction(todoId: number) {
     console.log('handleEditAction: ', todoId)
     //updateTodo(todo)
+  }
+
+  function handleCloseConfirmModal() {
+    showConfirmModal.value = false
+    itemToDeleteId.value = undefined
   }
 
   watch(

@@ -37,7 +37,7 @@ const { updateShowFooter } = useSettings();
   top: 0;
   margin: 0;
   height: 60px;
-  z-index: 999;
+  z-index: 100;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
