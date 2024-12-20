@@ -1,0 +1,1 @@
+import{_ as o,c as t,a as s,o as n}from"./index-BrBCosMo.js";const a={name:"NotFoundView"},c={class:"container"};function r(d,e,_,i,p,l){return n(),t("div",c,e[0]||(e[0]=[s("h3",null,"Нет такой заметки :(",-1)]))}const f=o(a,[["render",r],["__scopeId","data-v-14c193dd"]]);export{f as default};
