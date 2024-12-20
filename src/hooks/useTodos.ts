@@ -53,13 +53,14 @@ export default function useTodos() {
     }
 
     const getTodoById = (id: number): TodoModel => {
+        console.log('banana: ', id)
         store.getTodoById(id)
         const todo: TodoModel | null = store.getTodo
 
         if (todo === null) {
             throw Error('todo cant be null.')
         }
-
+        console.log(todo)
         return todo
     }
 

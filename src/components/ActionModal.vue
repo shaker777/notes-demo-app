@@ -9,11 +9,11 @@
                   @click="onCancel"
                   class="close-button"/>
       </div>
-      <p class="message">{{ message }}</p>
+      <slot name="content"></slot>
       <div class="footer">
-        <TextButton title="Удалить"
+        <TextButton :title="actionTitle"
                     :destructive="true"
-                    @click="onConfirm"
+                    @click="onAction"
                     class="action-button"/>
         <TextButton title="Отмена"
                     :destructive="false"
@@ -29,8 +29,8 @@ import IconButton from "./IconButton.vue"
 import TextButton from "./TextButton.vue"
 defineProps<{
   title: string,
-  message: string,
-  onConfirm:() => void,
+  actionTitle: string
+  onAction:() => void,
   onCancel:() => void
 }>()
 </script>
@@ -53,14 +53,7 @@ defineProps<{
 .container {
   background-color: white;
   border-radius: 8px;
-  width: 300px;
   overflow:hidden;
-}
-
-.message {
-  text-align: center;
-  font-size: 1.2rem;
-  padding: 1rem;
 }
 
 .header {

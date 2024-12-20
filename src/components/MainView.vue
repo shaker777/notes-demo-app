@@ -20,11 +20,15 @@
             {{ capitalizeFirstLetter(entity.title) }}
           </template>
         </table-view>
-        <ConfirmModal  v-if="showConfirmModal === true"
-                       title="Удаление"
-                       message="Удалить заметку?"
-                       :on-confirm="onDeleteConfirmed"
-                       :on-cancel="handleCloseConfirmModal"/>
+        <ActionModal  v-if="showConfirmDeleteModal === true"
+                      title="Удаление"
+                      action-title="Удалить"
+                      :on-action="onDeleteConfirmed"
+                      :on-cancel="handleCloseConfirmModal">
+          <template #content>
+            <p class="message">{{getTodo()}}</p>
+          </template>
+        </ActionModal>
       </div>
     </div>
   </main>
@@ -37,7 +41,7 @@
   import useSettings from '@/hooks/useSettings'
   import useTodos from '@/hooks/useTodos'
   import TableView from "./TableView.vue";
-  import ConfirmModal from "./ConfirmModal.vue";
+  import ActionModal from "./ActionModal.vue";
   // import router from '@/router'
   import { watch } from "vue";
   import { useRoute } from "vue-router";
@@ -48,12 +52,12 @@
   const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted } = useSettings();
   const isLoading = ref<boolean>(true)
   const processInformation = ref<string>('Загрузка данных...')
-  const { todos, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo } = useTodos();
+  const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
   const headers:string[] = ['№', 'Заметка','Сделано', '']
 
-  const showConfirmModal = ref<boolean>(false)
+  const showConfirmDeleteModal = ref<boolean>(false)
   const itemToDeleteId = ref<number | undefined>()
 
   function handleToggleFilter () {
@@ -69,15 +73,20 @@
      */
   }
   function handleDeleteAction(todoId: number) {
-    showConfirmModal.value = true
+    showConfirmDeleteModal.value = true
     itemToDeleteId.value = todoId
   }
 
   function onDeleteConfirmed () {
     if (itemToDeleteId.value) {
       removeTodo(itemToDeleteId.value)
-      showConfirmModal.value = false
+      showConfirmDeleteModal.value = false
     }
+  }
+
+  function getTodo() {
+    const todo: TodoModel = getTodoById(itemToDeleteId.value)
+    return todo.title
   }
 
   function handleDoneAction(todo:TodoModel) {
@@ -90,7 +99,7 @@
   }
 
   function handleCloseConfirmModal() {
-    showConfirmModal.value = false
+    showConfirmDeleteModal.value = false
     itemToDeleteId.value = undefined
   }
 
@@ -148,5 +157,11 @@
 #process-information {
   padding-top: 30px;
   text-align: center;
+}
+
+.message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 1rem;
 }
 </style>
