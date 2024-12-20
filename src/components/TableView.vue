@@ -43,7 +43,8 @@
             <div v-if="i === 3" class="buttonsContainer">
               <IconButton icon="pencil"
                           :dark="true"
-                          @click="editItem(entity.id)"/>
+                          @click="editItem(entity.id)"
+              class="action-button"/>
               <IconButton icon="trash"
                           :dark="true"
                           @click="deleteItem(entity.id)"/>
@@ -74,7 +75,7 @@
 <style scoped>
 table {
   border-collapse: collapse;
-  width: 100%;
+  width: 100vw;
   table-layout: auto !important;
   word-wrap: break-word;
 }
@@ -87,7 +88,7 @@ table>thead>tr>th {
 }
 
 td {
-  padding: 24px;
+  padding: 12px;
   text-align: center;
   border-bottom: 1px solid rgb(224, 242, 237);
 }
@@ -143,6 +144,10 @@ td {
   justify-content: space-evenly;
   align-items: center;
 }
+.action-button {
+  margin-right: 10px;
+}
+
 .flexContainer {
   display: flex;
   flex-direction: row;

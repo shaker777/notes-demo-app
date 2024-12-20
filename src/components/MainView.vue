@@ -26,7 +26,7 @@
                       :on-action="onDeleteConfirmed"
                       :on-cancel="handleCloseConfirmModal">
           <template #content>
-            <p class="message">{{getTodo()}}</p>
+            <p class="message">{{getItemToDelete()}}</p>
           </template>
         </ActionModal>
       </div>
@@ -84,9 +84,11 @@
     }
   }
 
-  function getTodo() {
-    const todo: TodoModel = getTodoById(itemToDeleteId.value)
-    return todo.title
+  function getItemToDelete() {
+    if (itemToDeleteId.value) {
+      const todo: TodoModel = getTodoById(itemToDeleteId.value)
+      return todo.title
+    }
   }
 
   function handleDoneAction(todo:TodoModel) {

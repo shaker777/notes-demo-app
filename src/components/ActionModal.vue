@@ -54,6 +54,7 @@ defineProps<{
   background-color: white;
   border-radius: 8px;
   overflow:hidden;
+  max-width: 90%;
 }
 
 .header {
