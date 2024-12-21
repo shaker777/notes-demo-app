@@ -1,5 +1,5 @@
 <template>
-  <p :class="destructive ? 'button destructive' : 'button base'">
+  <p :class="destructive ? 'button destructive' : 'button done'">
     {{ title }}
   </p>
 </template>
@@ -13,7 +13,6 @@ defineProps<{
 
 <style scoped>
 .button {
-  color: white;
   font-size: 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -25,9 +24,16 @@ defineProps<{
 }
 
 .base {
+  color: black;
+  background-color: rgba(128, 128, 128, 0.3);
+}
+
+.done {
+  color: white;
   background-color: rgb(45, 196, 143);
 }
 .destructive {
+  color: white;
   background-color: rgb(180 17 17);
 }
 </style>

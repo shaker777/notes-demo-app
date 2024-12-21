@@ -6,11 +6,7 @@ import {computed, reactive} from 'vue'
 export const useTodoStore = defineStore('todo', () => {
     const state = reactive<TodoState>({
         todo: null,
-        todos: [
-            // new TodoModel(1, 'Create app', 'description', false),
-            // new TodoModel(2, 'Read article', 'description', false),
-            //new TodoModel(3, 'Delete article', 'description', true)
-        ]
+        todos: []
     }) as TodoState
 
     const getTodo = computed((): TodoModel | null => state.todo)
@@ -27,7 +23,7 @@ export const useTodoStore = defineStore('todo', () => {
     }
 
     const addTodo = (todoModel: TodoModel): void => {
-        state.todos = [...state.todos, todoModel]
+        state.todos = [todoModel, ...state.todos]
     }
 
     const setTodo = (todoModel: TodoModel): void => {

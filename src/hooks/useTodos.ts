@@ -4,8 +4,8 @@ import {useTodoStore} from '@/stores/todo'
 
 export default function useTodos() {
     const store = useTodoStore()
-    const newTodoTitle = ref('')
-    const newTodoDescription = ref('')
+    const newTodoTitle = ref<string>('')
+    const newTodoCompleted = ref<boolean>(false)
 
     const todos = computed(() => store.getTodos)
 
@@ -22,16 +22,14 @@ export default function useTodos() {
 
     const addTodo = (): void => {
         const title = newTodoTitle.value && newTodoTitle.value.trim()
-        const description = newTodoDescription.value && newTodoDescription.value.trim()
         if (!title) {
             return
         }
-        const data = {id : getNewId(), title, competed: false, description}
+        const data = {id : getNewId(), title, completed: newTodoCompleted.value}
         const payload = new TodoModel(data)
-
         store.addTodo(payload)
         newTodoTitle.value = ''
-        newTodoDescription.value = ''
+        newTodoCompleted.value = false
     }
 
     const removeTodo = (id: number | undefined): void => {
@@ -53,14 +51,12 @@ export default function useTodos() {
     }
 
     const getTodoById = (id: number): TodoModel => {
-        console.log('banana: ', id)
         store.getTodoById(id)
         const todo: TodoModel | null = store.getTodo
 
         if (todo === null) {
             throw Error('todo cant be null.')
         }
-        console.log(todo)
         return todo
     }
 
@@ -68,7 +64,7 @@ export default function useTodos() {
         setTodos,
         addTodo,
         newTodoTitle,
-        newTodoDescription,
+        newTodoCompleted,
         updateTodo,
         updateTodoDone,
         removeTodo,

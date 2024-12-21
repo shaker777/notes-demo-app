@@ -12,7 +12,7 @@
       <slot name="content"></slot>
       <div class="footer">
         <TextButton :title="actionTitle"
-                    :destructive="true"
+                    :destructive="destructive"
                     @click="onAction"
                     class="action-button"/>
         <TextButton title="Отмена"
@@ -31,7 +31,8 @@ defineProps<{
   title: string,
   actionTitle: string
   onAction:() => void,
-  onCancel:() => void
+  onCancel:() => void,
+  destructive: boolean
 }>()
 </script>
 
@@ -54,7 +55,10 @@ defineProps<{
   background-color: white;
   border-radius: 8px;
   overflow:hidden;
+  min-width: 50%;
   max-width: 90%;
+  display: flex;
+  flex-direction: column;
 }
 
 .header {

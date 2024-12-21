@@ -20,13 +20,24 @@
             {{ capitalizeFirstLetter(entity.title) }}
           </template>
         </table-view>
-        <ActionModal  v-if="showConfirmDeleteModal === true"
+        <ActionModal  v-if="showEditModal === true"
+                      title="Редактирование"
+                      action-title="Сохранить"
+                      :destructive="false"
+                      :on-action="handleCloseEditModal"
+                      :on-cancel="handleCloseEditModal">
+          <template #content>
+            <p class="message">{{selectedItem.title}}</p>
+          </template>
+        </ActionModal>
+        <ActionModal  v-if="showDeleteModal === true"
                       title="Удаление"
                       action-title="Удалить"
+                      :destructive="true"
                       :on-action="onDeleteConfirmed"
-                      :on-cancel="handleCloseConfirmModal">
+                      :on-cancel="handleCloseDeleteModal">
           <template #content>
-            <p class="message">{{getItemToDelete()}}</p>
+            <p class="message">{{capitalizeFirstLetter(selectedItem.title)}}</p>
           </template>
         </ActionModal>
       </div>
@@ -35,19 +46,18 @@
 </template>
 
 <script setup lang="ts">
-  import axios from 'axios'
-  import {onMounted, ref} from 'vue'
-  import {TodoModel} from "@/model/todo-model";
-  import useSettings from '@/hooks/useSettings'
-  import useTodos from '@/hooks/useTodos'
-  import TableView from "./TableView.vue";
-  import ActionModal from "./ActionModal.vue";
-  // import router from '@/router'
-  import { watch } from "vue";
-  import { useRoute } from "vue-router";
-  import capitalizeFirstLetter from "@/utilities/utilities";
+import axios from 'axios'
+// import router from '@/router'
+import {onMounted, ref, watch} from 'vue'
+import {TodoModel} from "@/model/todo-model";
+import useSettings from '@/hooks/useSettings'
+import useTodos from '@/hooks/useTodos'
+import TableView from "./TableView.vue";
+import ActionModal from "./ActionModal.vue";
+import {useRoute} from "vue-router";
+import capitalizeFirstLetter from "@/utilities/utilities";
 
-  const route = useRoute();
+const route = useRoute();
 
   const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted } = useSettings();
   const isLoading = ref<boolean>(true)
@@ -57,8 +67,9 @@
 
   const headers:string[] = ['№', 'Заметка','Сделано', '']
 
-  const showConfirmDeleteModal = ref<boolean>(false)
-  const itemToDeleteId = ref<number | undefined>()
+  const showEditModal = ref<boolean>(false)
+  const showDeleteModal = ref<boolean>(false)
+  const selectedItem = ref<TodoModel | undefined>()
 
   function handleToggleFilter () {
     updateFilterCompleted()
@@ -72,22 +83,15 @@
     }
      */
   }
-  function handleDeleteAction(todoId: number) {
-    showConfirmDeleteModal.value = true
-    itemToDeleteId.value = todoId
+  function handleDeleteAction(id: number) {
+    selectedItem.value = getTodoById(id)
+    showDeleteModal.value = true
   }
 
   function onDeleteConfirmed () {
-    if (itemToDeleteId.value) {
-      removeTodo(itemToDeleteId.value)
-      showConfirmDeleteModal.value = false
-    }
-  }
-
-  function getItemToDelete() {
-    if (itemToDeleteId.value) {
-      const todo: TodoModel = getTodoById(itemToDeleteId.value)
-      return todo.title
+    if (selectedItem.value) {
+      removeTodo(selectedItem.value.id)
+      showDeleteModal.value = false
     }
   }
 
@@ -95,14 +99,20 @@
     updateTodoDone(todo.id, todo.completed)
   }
 
-  function handleEditAction(todoId: number) {
-    console.log('handleEditAction: ', todoId)
+  function handleEditAction(id: number) {
+    selectedItem.value = getTodoById(id)
+    showEditModal.value = true
     //updateTodo(todo)
   }
 
-  function handleCloseConfirmModal() {
-    showConfirmDeleteModal.value = false
-    itemToDeleteId.value = undefined
+  function handleCloseEditModal() {
+    showEditModal.value = false
+    selectedItem.value = undefined
+  }
+
+  function handleCloseDeleteModal() {
+    showDeleteModal.value = false
+    selectedItem.value = undefined
   }
 
   watch(
