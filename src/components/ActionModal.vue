@@ -16,7 +16,7 @@
                     @click="onAction"
                     class="action-button"/>
         <TextButton title="Отмена"
-                    :destructive="false"
+                    :destructive="undefined"
                     @click="onCancel"
                     class="action-button"/>
       </div>

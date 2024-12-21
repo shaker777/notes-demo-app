@@ -146,7 +146,7 @@ nav a:first-of-type {
   -moz-box-shadow: none;
   box-shadow: none;
   border-style: solid;
-  border-color: #3a6c56;
+  border-color: #c1c7d0;
   border-radius: 8px;
   padding: 0.5rem;
 }

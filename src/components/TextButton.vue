@@ -1,5 +1,5 @@
 <template>
-  <p :class="destructive ? 'button destructive' : 'button done'">
+  <p :class="destructive === undefined ? 'button base' : (destructive ? 'button destructive' : 'button done')">
     {{ title }}
   </p>
 </template>
@@ -7,7 +7,7 @@
 <script setup lang="ts">
 defineProps<{
   title: string,
-  destructive: boolean,
+  destructive?: boolean | undefined,
 }>()
 </script>
 

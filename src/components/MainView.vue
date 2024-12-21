@@ -27,7 +27,7 @@
                       :on-action="handleCloseEditModal"
                       :on-cancel="handleCloseEditModal">
           <template #content>
-            <p class="message">{{selectedItem.title}}</p>
+            <p class="message">{{selectedItem?.title}}</p>
           </template>
         </ActionModal>
         <ActionModal  v-if="showDeleteModal === true"
@@ -37,7 +37,7 @@
                       :on-action="onDeleteConfirmed"
                       :on-cancel="handleCloseDeleteModal">
           <template #content>
-            <p class="message">{{capitalizeFirstLetter(selectedItem.title)}}</p>
+            <p class="message">{{capitalizeFirstLetter(selectedItem?.title)}}</p>
           </template>
         </ActionModal>
       </div>
