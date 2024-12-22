@@ -1,7 +1,7 @@
 import type {TodoState} from './type/todo'
 import {TodoModel} from '@/model/todo-model'
 import {defineStore} from 'pinia'
-import {computed, reactive} from 'vue'
+import {computed, reactive, ref} from 'vue'
 
 export const useTodoStore = defineStore('todo', () => {
     const state = reactive<TodoState>({

@@ -23,23 +23,14 @@
         <ActionModal  v-if="showEditModal === true"
                       title="Редактирование"
                       action-title="Сохранить"
-                      :destructive="false"
-                      :on-action="handleCloseEditModal"
-                      :on-cancel="handleCloseEditModal">
-          <template #content>
-            <p class="message">{{selectedItem?.title}}</p>
-          </template>
-        </ActionModal>
+                      :deletion="false"
+                      :on-close="handleCloseEditModal"/>
         <ActionModal  v-if="showDeleteModal === true"
                       title="Удаление"
                       action-title="Удалить"
-                      :destructive="true"
+                      :deletion="true"
                       :on-action="onDeleteConfirmed"
-                      :on-cancel="handleCloseDeleteModal">
-          <template #content>
-            <p class="message">{{capitalizeFirstLetter(selectedItem?.title)}}</p>
-          </template>
-        </ActionModal>
+                      :on-close="handleCloseDeleteModal"/>
       </div>
     </div>
   </main>
@@ -55,21 +46,21 @@ import useTodos from '@/hooks/useTodos'
 import TableView from "./TableView.vue";
 import ActionModal from "./ActionModal.vue";
 import {useRoute} from "vue-router";
-import capitalizeFirstLetter from "@/utilities/utilities";
+import {capitalizeFirstLetter} from "@/utilities/utilities";
 
 const route = useRoute();
 
   const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted } = useSettings();
   const isLoading = ref<boolean>(true)
   const processInformation = ref<string>('Загрузка данных...')
-  const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo } = useTodos();
+  const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo, selectedTodoId } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
   const headers:string[] = ['№', 'Заметка','Сделано', '']
 
   const showEditModal = ref<boolean>(false)
   const showDeleteModal = ref<boolean>(false)
-  const selectedItem = ref<TodoModel | undefined>()
+  // const selectedTodoId = ref<number | undefined>()
 
   function handleToggleFilter () {
     updateFilterCompleted()
@@ -83,39 +74,42 @@ const route = useRoute();
     }
      */
   }
+
+  function handleEditAction(id: number) {
+    selectedTodoId.value = id
+    showEditModal.value = true
+  }
+
+function handleCloseEditModal() {
+  selectedTodoId.value = undefined
+  showEditModal.value = false
+}
+
   function handleDeleteAction(id: number) {
-    selectedItem.value = getTodoById(id)
+    console.log('foo: ', id)
+    selectedTodoId.value = id
+    console.log('bar: ', selectedTodoId.value)
     showDeleteModal.value = true
   }
 
-  function onDeleteConfirmed () {
-    if (selectedItem.value) {
-      removeTodo(selectedItem.value.id)
-      showDeleteModal.value = false
-    }
-  }
+function handleCloseDeleteModal() {
+  selectedTodoId.value = undefined
+  showDeleteModal.value = false
+}
 
   function handleDoneAction(todo:TodoModel) {
     updateTodoDone(todo.id, todo.completed)
   }
 
-  function handleEditAction(id: number) {
-    selectedItem.value = getTodoById(id)
-    showEditModal.value = true
-    //updateTodo(todo)
-  }
-
-  function handleCloseEditModal() {
-    showEditModal.value = false
-    selectedItem.value = undefined
-  }
-
-  function handleCloseDeleteModal() {
+function onDeleteConfirmed () {
+  if (selectedTodoId.value) {
+    //removeTodo(selectedTodoId.value)
     showDeleteModal.value = false
-    selectedItem.value = undefined
   }
+}
 
-  watch(
+
+watch(
   () => route.fullPath,
   async () => {
     console.log("route fullPath updated: ", route.fullPath);

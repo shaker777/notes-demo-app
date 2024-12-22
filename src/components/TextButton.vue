@@ -5,10 +5,18 @@
 </template>
 
 <script setup lang="ts">
+// import {computed} from "vue";
+
 defineProps<{
   title: string,
   destructive?: boolean | undefined,
 }>()
+/*
+const buttonStyle = computed(() => {
+  console.log('destructive: ', destructive)
+  return destructive === undefined ? 'button base' : (destructive ? 'button destructive' : 'button done')
+})
+*/
 </script>
 
 <style scoped>
@@ -36,4 +44,10 @@ defineProps<{
   color: white;
   background-color: rgb(180 17 17);
 }
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 </style>

@@ -11,6 +11,8 @@ export default function useTodos() {
 
     const todosCompeted = computed(() => store.getTodos.filter(item => item.completed))
 
+    let selectedTodoId = ref<number | undefined>()
+
     const getNewId = (): number => {
         const todosSlice = store.getTodos.slice(-1)
         if (todosSlice.length > 0) {
@@ -70,6 +72,7 @@ export default function useTodos() {
         removeTodo,
         todos,
         todosCompeted,
-        getTodoById
+        getTodoById,
+        selectedTodoId
     }
 }
