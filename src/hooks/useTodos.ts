@@ -4,8 +4,20 @@ import {useTodoStore} from '@/stores/todo'
 
 export default function useTodos() {
     const store = useTodoStore()
-    const newTodoTitle = ref<string>('')
-    const newTodoCompleted = ref<boolean>(false)
+    //const newTodoTitle = ref<string>('')
+    //const newTodoCompleted = ref<boolean>(false)
+
+    const newTodoTitle = computed(() => store.getNewTodoTitle)
+    const setNewTodoTitle = (value:string): void => {
+        store.setNewTodoTitle(value)
+    }
+
+    const newTodoCompleted = computed(() => store.getNewTodoCompleted)
+    const setNewTodoCompleted = (value:boolean): void => {
+        store.setNewTodoCompleted(value)
+    }
+
+    const valid = computed(() => store.getNewTodoTitle.length > 2 && store.getNewTodoTitle.length < 51)
 
     const todos = computed(() => store.getTodos)
 
@@ -28,8 +40,8 @@ export default function useTodos() {
         const data = {id : getNewId(), title, completed: newTodoCompleted.value}
         const payload = new TodoModel(data)
         store.addTodo(payload)
-        newTodoTitle.value = ''
-        newTodoCompleted.value = false
+        setNewTodoTitle('')
+        setNewTodoCompleted(false)
     }
 
     const removeTodo = (id: number | undefined): void => {
@@ -60,16 +72,27 @@ export default function useTodos() {
         return todo
     }
 
+    const selectedId = computed(() => store.getSelectedId)
+
+    const setSelectedId = (value:number | null): void => {
+        store.setSelectedId(value)
+    }
+
     return {
         setTodos,
         addTodo,
         newTodoTitle,
+        setNewTodoTitle,
         newTodoCompleted,
+        setNewTodoCompleted,
         updateTodo,
         updateTodoDone,
         removeTodo,
         todos,
         todosCompeted,
-        getTodoById
+        getTodoById,
+        valid,
+        selectedId,
+        setSelectedId
     }
 }

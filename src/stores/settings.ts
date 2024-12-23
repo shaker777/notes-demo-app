@@ -1,11 +1,13 @@
 import type {SettingsState} from './type/settings'
 import { defineStore } from 'pinia'
 import {computed, reactive} from 'vue'
+import ActionMode from "@/types/enum";
 
 export const useSettingsStore = defineStore('settings', () => {
     const state = reactive<SettingsState>({
         showFooter: localStorage.getItem('showFooter') === 'true',
-        filterCompleted: false
+        filterCompleted: false,
+        actionMode: ActionMode.None,
     }) as SettingsState
 
     const getShowFooter = computed((): boolean | null => state.showFooter)
@@ -19,12 +21,16 @@ export const useSettingsStore = defineStore('settings', () => {
 
     function toggleFilterCompleted(): void {
         state.filterCompleted = !state.filterCompleted
-        //console.log('state.filterCompleted: ', state.filterCompleted)
     }
 
     function setFilterCompleted(value:boolean): void {
         state.filterCompleted = value
-        //console.log('state.filterCompleted: ', state.filterCompleted)
+    }
+
+    const getActionMode = computed((): ActionMode => state.actionMode)
+
+    function setActionMode(value:ActionMode): void {
+        state.actionMode = value
     }
 
     return {
@@ -32,6 +38,8 @@ export const useSettingsStore = defineStore('settings', () => {
         toggleShowFooter,
         getFilterCompleted,
         toggleFilterCompleted,
-        setFilterCompleted
+        setFilterCompleted,
+        getActionMode,
+        setActionMode
     }
 })

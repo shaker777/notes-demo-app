@@ -6,7 +6,10 @@ import {computed, reactive} from 'vue'
 export const useTodoStore = defineStore('todo', () => {
     const state = reactive<TodoState>({
         todo: null,
-        todos: []
+        todos: [],
+        selectedId: null,
+        newTodoTitle: '',
+        newTodoCompleted: false
     }) as TodoState
 
     const getTodo = computed((): TodoModel | null => state.todo)
@@ -48,6 +51,24 @@ export const useTodoStore = defineStore('todo', () => {
         state.todos[index].completed = todoModel.done
     }
 
+    const getSelectedId = computed((): number | null => state.selectedId)
+
+    function setSelectedId(value:number | null): void {
+        state.selectedId = value
+    }
+
+    const getNewTodoTitle = computed((): string => state.newTodoTitle)
+
+    function setNewTodoTitle(value:string): void {
+        state.newTodoTitle = value
+    }
+
+    const getNewTodoCompleted = computed((): boolean => state.newTodoCompleted)
+
+    function setNewTodoCompleted(value:boolean): void {
+        state.newTodoCompleted = value
+    }
+
     return {
         getTodo,
         getTodos,
@@ -58,6 +79,12 @@ export const useTodoStore = defineStore('todo', () => {
         setTodos,
         removeTodo,
         updateTodo,
-        updateTodoDone
+        updateTodoDone,
+        getSelectedId,
+        setSelectedId,
+        getNewTodoTitle,
+        setNewTodoTitle,
+        getNewTodoCompleted,
+        setNewTodoCompleted
     }
 })

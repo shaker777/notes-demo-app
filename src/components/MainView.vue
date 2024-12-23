@@ -23,23 +23,13 @@
         <ActionModal  v-if="showEditModal === true"
                       title="Редактирование"
                       action-title="Сохранить"
-                      :destructive="false"
-                      :on-action="handleCloseEditModal"
-                      :on-cancel="handleCloseEditModal">
-          <template #content>
-            <p class="message">{{selectedItem?.title}}</p>
-          </template>
-        </ActionModal>
+                      :on-action="handleAction"
+                      :on-close="handleCloseEditModal"/>
         <ActionModal  v-if="showDeleteModal === true"
                       title="Удаление"
                       action-title="Удалить"
-                      :destructive="true"
-                      :on-action="onDeleteConfirmed"
-                      :on-cancel="handleCloseDeleteModal">
-          <template #content>
-            <p class="message">{{capitalizeFirstLetter(selectedItem?.title)}}</p>
-          </template>
-        </ActionModal>
+                      :on-action="handleAction"
+                      :on-close="handleCloseDeleteModal"/>
       </div>
     </div>
   </main>
@@ -47,29 +37,30 @@
 
 <script setup lang="ts">
 import axios from 'axios'
-// import router from '@/router'
+import router from '@/router'
 import {onMounted, ref, watch} from 'vue'
 import {TodoModel} from "@/model/todo-model";
 import useSettings from '@/hooks/useSettings'
 import useTodos from '@/hooks/useTodos'
 import TableView from "./TableView.vue";
+import ActionMode from "@/types/enum"
 import ActionModal from "./ActionModal.vue";
 import {useRoute} from "vue-router";
 import capitalizeFirstLetter from "@/utilities/utilities";
 
 const route = useRoute();
 
-  const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted } = useSettings();
+  const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted, actionMode, setActionMode } = useSettings();
   const isLoading = ref<boolean>(true)
   const processInformation = ref<string>('Загрузка данных...')
-  const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo } = useTodos();
+  const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo, selectedId, setSelectedId } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
   const headers:string[] = ['№', 'Заметка','Сделано', '']
 
   const showEditModal = ref<boolean>(false)
   const showDeleteModal = ref<boolean>(false)
-  const selectedItem = ref<TodoModel | undefined>()
+
 
   function handleToggleFilter () {
     updateFilterCompleted()
@@ -84,15 +75,9 @@ const route = useRoute();
      */
   }
   function handleDeleteAction(id: number) {
-    selectedItem.value = getTodoById(id)
+    setSelectedId(id)
+    setActionMode(ActionMode.Delete)
     showDeleteModal.value = true
-  }
-
-  function onDeleteConfirmed () {
-    if (selectedItem.value) {
-      removeTodo(selectedItem.value.id)
-      showDeleteModal.value = false
-    }
   }
 
   function handleDoneAction(todo:TodoModel) {
@@ -100,19 +85,40 @@ const route = useRoute();
   }
 
   function handleEditAction(id: number) {
-    selectedItem.value = getTodoById(id)
+    setSelectedId(id)
+    setActionMode(ActionMode.Update)
     showEditModal.value = true
     //updateTodo(todo)
   }
 
   function handleCloseEditModal() {
     showEditModal.value = false
-    selectedItem.value = undefined
+    setSelectedId(null)
   }
 
   function handleCloseDeleteModal() {
     showDeleteModal.value = false
-    selectedItem.value = undefined
+    setSelectedId(null)
+  }
+
+  function onDeleteConfirmed () {
+    if (selectedId.value) {
+      removeTodo(selectedId.value)
+      showDeleteModal.value = false
+    }
+  }
+
+  function handleAction() {
+    switch (actionMode.value) {
+      case ActionMode.Update:
+        console.log('UPDATE!');
+        break;
+      case ActionMode.Delete:
+        onDeleteConfirmed()
+        break;
+      default:
+        break;
+    }
   }
 
   watch(
@@ -171,9 +177,4 @@ const route = useRoute();
   text-align: center;
 }
 
-.message {
-  text-align: center;
-  font-size: 1.2rem;
-  padding: 1rem;
-}
 </style>

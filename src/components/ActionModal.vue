@@ -6,18 +6,23 @@
         <h2 class="title">{{ title }}</h2>
         <IconButton icon="times"
                   :dark="true"
-                  @click="onCancel"
+                  @click="onClose"
                   class="close-button"/>
       </div>
-      <slot name="content"></slot>
+      <div v-if="actionMode === 2">
+        <p class="message">{{capitalizeFirstLetter(getTodoById(selectedId).title)}}</p>
+      </div>
+      <div v-else>
+        <NoteContent :title="newTodoTitle" :completed="newTodoCompleted"/>
+      </div>
       <div class="footer">
         <TextButton :title="actionTitle"
-                    :destructive="destructive"
+                    :destructive="actionMode === 2"
                     @click="onAction"
-                    class="action-button"/>
+                    :class="(actionMode === 2 || valid) ? 'action-button' : 'action-button action-button-disabled'"/>
         <TextButton title="Отмена"
                     :destructive="undefined"
-                    @click="onCancel"
+                    @click="onClose"
                     class="action-button"/>
       </div>
     </div>
@@ -27,13 +32,20 @@
 <script setup lang="ts">
 import IconButton from "./IconButton.vue"
 import TextButton from "./TextButton.vue"
+import useTodos from "@/hooks/useTodos";
+import useSettings from "@/hooks/useSettings";
+import capitalizeFirstLetter from "@/utilities/utilities";
+import NoteContent from "@/components/NoteContent.vue";
+const { actionMode } = useSettings()
+const { addTodo, newTodoTitle, newTodoCompleted, valid, removeTodo, selectedId, getTodoById } = useTodos()
+
 defineProps<{
   title: string,
-  actionTitle: string
+  actionTitle: string,
   onAction:() => void,
-  onCancel:() => void,
-  destructive: boolean
+  onClose:() => void,
 }>()
+
 </script>
 
 <style scoped>
@@ -56,10 +68,17 @@ defineProps<{
   border-radius: 8px;
   overflow:hidden;
   min-width: 50%;
-  max-width: 90%;
+  max-width: 95%;
   display: flex;
   flex-direction: column;
 }
+
+@media only screen and (max-width: 600px) {
+  .container {
+    min-width: 95%;
+  }
+}
+
 
 .header {
   display: flex;
@@ -92,4 +111,16 @@ defineProps<{
   margin-right: 5px;
   margin-left: 5px;
 }
+
+.action-button-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.message {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+
 </style>

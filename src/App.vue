@@ -5,21 +5,8 @@
   <ActionModal  v-if="showAddModal === true"
                 title="Создать заметку"
                 action-title="Создать"
-                :destructive="false"
-                :on-action="onCreate"
-                :on-cancel="handleCloseAddModal">
-    <template #content>
-      <textarea v-model="newTodoTitle" class="text-area"/>
-      <div class="custom-checkbox-container">
-        <input type="checkbox"
-              class="custom-checkbox"
-              id="completeCheck"
-              v-model="newTodoCompleted"
-        >
-        <label class="custom-checkbox-label" for="completeCheck">Сделано</label>
-      </div>
-    </template>
-  </ActionModal>
+                :on-action="handleAction"
+                :on-close="handleCloseAddModal"/>
 </template>
 
 <script setup lang="ts">
@@ -28,17 +15,19 @@ import useSettings from '@/hooks/useSettings'
 import HeaderView from "@/components/HeaderView.vue";
 import FooterView from "@/components/FooterView.vue";
 import ActionModal from "@/components/ActionModal.vue";
+import ActionMode from "@/types/enum"
 import {ref} from "vue";
 import useTodos from "@/hooks/useTodos";
 
-const { showFooter } = useSettings();
-const { addTodo, newTodoTitle, newTodoCompleted } = useTodos()
+const { showFooter, actionMode, setActionMode } = useSettings();
+const { addTodo, valid } = useTodos()
 
 const title:string = `Vue Notes SPA ${__APP_VERSION__} Новогоднее издание`
 
 const showAddModal = ref<boolean>(false)
 
 function handleShowAddModal () {
+  setActionMode(ActionMode.Create)
   showAddModal.value = true
 }
 
@@ -46,10 +35,13 @@ function handleCloseAddModal() {
   showAddModal.value = false
 }
 
-function onCreate() {
-  addTodo()
-  showAddModal.value = false
+function handleAction() {
+  if (actionMode.value === ActionMode.Create && valid.value === true) {
+    addTodo()
+    showAddModal.value = false
+  }
 }
+
 
 </script>
 <!--
@@ -131,41 +123,4 @@ nav a:first-of-type {
   }
 }
 
-
-
-.text-area {
-  min-height: 100px;
-  margin: auto;
-  margin-left: 15px;
-  margin-right: 15px;
-  font-size: 1rem;
-  resize: none;
-  overflow: auto;
-  outline: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  border-style: solid;
-  border-color: #c1c7d0;
-  border-radius: 8px;
-  padding: 0.5rem;
-}
-
-.custom-checkbox-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  align-items: center;
-  margin-left: 15px;
-  margin-top: 10px;
-}
-
-.custom-checkbox {
-  accent-color: rgb(45, 196, 143);
-  cursor: pointer;
-}
-
-.custom-checkbox-label {
-  margin-left: 10px;
-}
 </style>

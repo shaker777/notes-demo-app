@@ -1,5 +1,6 @@
 import {ref, computed} from 'vue'
 import {useSettingsStore} from '@/stores/settings'
+import ActionMode from "@/types/enum";
 
 export default function useSettings() {
     const store = useSettingsStore()
@@ -20,11 +21,19 @@ export default function useSettings() {
         store.setFilterCompleted(value)
     }
 
+    const actionMode = computed(() => store.getActionMode)
+
+    const setActionMode = (value:ActionMode): void => {
+        store.setActionMode(value)
+    }
+
     return {
         showFooter,
         updateShowFooter,
         filterCompleted,
         updateFilterCompleted,
-        setFilterCompleted
+        setFilterCompleted,
+        actionMode,
+        setActionMode
     }
 }
