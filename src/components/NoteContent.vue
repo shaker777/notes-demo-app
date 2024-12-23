@@ -29,13 +29,13 @@ const _newTodoTitle = ref<string>('')
 const _newTodoCompleted = ref<boolean>(false)
 
 function handleTitleChange() {
-  setNewTodoTitle(_newTodoTitle)
+  setNewTodoTitle(_newTodoTitle.value)
   // console.log(newTodoTitle.value)
   // @input="validateInputLenght(newTodoTitle)"
 }
 
 function handleCompletedChange() {
-  setNewTodoCompleted(_newTodoCompleted)
+  setNewTodoCompleted(_newTodoCompleted.value)
 }
 
 function validateInputLenght(value: string | undefined): boolean | string {

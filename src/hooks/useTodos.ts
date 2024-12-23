@@ -62,7 +62,8 @@ export default function useTodos() {
         store.updateTodoDone({id: id, done: done})
     }
 
-    const getTodoById = (id: number): TodoModel => {
+    const getTodoById = (id: number | null): TodoModel => {
+        if (!id) {return }
         store.getTodoById(id)
         const todo: TodoModel | null = store.getTodo
 
