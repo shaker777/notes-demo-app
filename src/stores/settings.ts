@@ -6,6 +6,7 @@ import ActionMode from "@/types/enum";
 export const useSettingsStore = defineStore('settings', () => {
     const state = reactive<SettingsState>({
         showFooter: localStorage.getItem('showFooter') === 'true',
+        showAddButton: true,
         filterCompleted: false,
         actionMode: ActionMode.None,
     }) as SettingsState
@@ -17,10 +18,17 @@ export const useSettingsStore = defineStore('settings', () => {
         localStorage.setItem('showFooter', state.showFooter ? 'true' :  'false');
     }
 
+    const getShowAddButton = computed((): boolean | null => state.showAddButton)
+
+    function setShowAddButton(value:boolean): void {
+        state.showAddButton = value
+    }
+
     const getFilterCompleted = computed((): boolean | null => state.filterCompleted)
 
     function toggleFilterCompleted(): void {
         state.filterCompleted = !state.filterCompleted
+        console.log('state.filterCompleted: ', state.filterCompleted)
     }
 
     function setFilterCompleted(value:boolean): void {
@@ -36,6 +44,8 @@ export const useSettingsStore = defineStore('settings', () => {
     return {
         getShowFooter,
         toggleShowFooter,
+        getShowAddButton,
+        setShowAddButton,
         getFilterCompleted,
         toggleFilterCompleted,
         setFilterCompleted,

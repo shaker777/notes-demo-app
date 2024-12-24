@@ -1,14 +1,14 @@
 <template>
   <div class="content-wrapper">
-    <textarea v-model:="_newTodoTitle"
+    <textarea v-model="_todoTitle"
               class="text-area"
               @input="handleTitleChange"/>
-    <label class="validation-label" v-if="validateInputLenght(newTodoTitle)">{{ validateInputLenght(newTodoTitle) }}</label>
+    <label class="validation-label" v-if="validateInputLenght(_todoTitle)">{{ validateInputLenght(_todoTitle) }}</label>
     <div class="custom-checkbox-container">
       <input type="checkbox"
              class="custom-checkbox"
              id="completeCheck"
-             v-model="_newTodoCompleted"
+             v-model="_todoCompleted"
              @input="handleCompletedChange"
       >
       <label class="custom-checkbox-label" for="completeCheck">Сделано</label>
@@ -22,20 +22,25 @@ import capitalizeFirstLetter from "@/utilities/utilities";
 import useSettings from "@/hooks/useSettings";
 import useTodos from "@/hooks/useTodos";
 
-const { actionMode } = useSettings()
-const { newTodoTitle, setNewTodoTitle,newTodoCompleted, setNewTodoCompleted } = useTodos()
+const { newTodoTitle, setNewTodoTitle,newTodoCompleted, setNewTodoCompleted, selectedId, getTodoById } = useTodos()
 
-const _newTodoTitle = ref<string>('')
-const _newTodoCompleted = ref<boolean>(false)
+const _todoTitle = ref<string>(selectedId.value ? capitalizeFirstLetter(getTodoById(selectedId.value).title) : newTodoTitle)
+const _todoCompleted = ref<boolean>(selectedId.value ? getTodoById(selectedId.value).completed : false)
 
 function handleTitleChange() {
-  setNewTodoTitle(_newTodoTitle.value)
-  // console.log(newTodoTitle.value)
-  // @input="validateInputLenght(newTodoTitle)"
+  //if (actionMode.value === ActionMode.Create) {
+    setNewTodoTitle(_todoTitle.value)
+  //} else {
+  //  console.log('update title')
+  //}
 }
 
 function handleCompletedChange() {
-  setNewTodoCompleted(_newTodoCompleted.value)
+  //if (actionMode.value === ActionMode.Create) {
+    setNewTodoCompleted(_todoCompleted.value)
+  //} else {
+  //  console.log('update completed')
+  //}
 }
 
 function validateInputLenght(value: string | undefined): boolean | string {

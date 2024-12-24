@@ -8,6 +8,18 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: MainView,
+        children: [
+            {
+                path: 'note/:id(\\d+)',
+                name: 'note_detail',
+                component: (): Promise<any> => import('@/components/NoteView.vue')
+            },
+            {
+                path: '/',
+                name: 'filtered',
+                component: MainView
+            }
+        ]
     },
     {
       path: '/notfound',
@@ -16,6 +28,8 @@ const router = createRouter({
       component: (): Promise<any> => import('@/components/NotFoundView.vue'),
     },
   ],
+    linkActiveClass: '',
+    linkExactActiveClass: '',
 })
 
 export default router

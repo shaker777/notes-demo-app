@@ -11,13 +11,16 @@
         :headers="headers"
         :data="filterCompleted? todosCompeted: todos"
         :filterCompleted="filterCompleted"
-        :toogle-filter="handleToggleFilter"
         :delete-item="handleDeleteAction"
         :check-item="handleDoneAction"
         :edit-item="handleEditAction"
         v-else>
           <template #column1="{ entity }">
+            <router-link :to="{name: 'note_detail', params: { id: entity.id }}" active-class="">
+              <div @click="onClickNote(entity.id)">
             {{ capitalizeFirstLetter(entity.title) }}
+              </div>
+            </router-link>
           </template>
         </table-view>
         <ActionModal  v-if="showEditModal === true"
@@ -32,6 +35,9 @@
                       :on-close="handleCloseDeleteModal"/>
       </div>
     </div>
+    <NoteView v-if="showDetail"
+              :title="selectedId ? capitalizeFirstLetter(getTodoById(selectedId).title) : ''"
+              :completed="selectedId ? getTodoById(selectedId).completed : false"/>
   </main>
 </template>
 
@@ -47,33 +53,28 @@ import ActionMode from "@/types/enum"
 import ActionModal from "./ActionModal.vue";
 import {useRoute} from "vue-router";
 import capitalizeFirstLetter from "@/utilities/utilities";
+import NoteView from "@/components/NoteView.vue";
 
-const route = useRoute();
+  const route = useRoute();
 
-  const { showFooter, filterCompleted, updateFilterCompleted, setFilterCompleted, actionMode, setActionMode } = useSettings();
+  const { showFooter, updateShowAddButton, filterCompleted, updateFilterCompleted, setFilterCompleted, actionMode, setActionMode } = useSettings();
   const isLoading = ref<boolean>(true)
   const processInformation = ref<string>('Загрузка данных...')
-  const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo, selectedId, setSelectedId } = useTodos();
+  const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo, selectedId, setSelectedId, newTodoTitle, newTodoCompleted } = useTodos();
   const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
   const headers:string[] = ['№', 'Заметка','Сделано', '']
 
   const showEditModal = ref<boolean>(false)
   const showDeleteModal = ref<boolean>(false)
+  const showDetail = ref<boolean>(false)
 
-
-  function handleToggleFilter () {
-    updateFilterCompleted()
-    /*
-    if (filterCompleted === true) {
-      console.log("test filterCompleted on ");
-      //router.push({path: '/', query: {completed: 'true'}})
-    } else {
-      console.log("test filterCompleted off");
-      //router.push({path: '/'})
-    }
-     */
+  function onClickNote(id: number) {
+    setSelectedId(id)
+    updateShowAddButton(false)
+    showDetail.value = true
   }
+
   function handleDeleteAction(id: number) {
     setSelectedId(id)
     setActionMode(ActionMode.Delete)
@@ -88,8 +89,19 @@ const route = useRoute();
     setSelectedId(id)
     setActionMode(ActionMode.Update)
     showEditModal.value = true
-    //updateTodo(todo)
   }
+
+function onDone() {
+  if (selectedId.value) {
+    const selected = getTodoById(selectedId.value)
+    const data = {id : selected.id, title: newTodoTitle.value, completed: newTodoCompleted.value}
+    const todo = new TodoModel(data)
+    console.log(todo)
+    updateTodo(todo)
+    showEditModal.value = false
+    setSelectedId(null)
+  }
+}
 
   function handleCloseEditModal() {
     showEditModal.value = false
@@ -112,6 +124,7 @@ const route = useRoute();
     switch (actionMode.value) {
       case ActionMode.Update:
         console.log('UPDATE!');
+        onDone()
         break;
       case ActionMode.Delete:
         onDeleteConfirmed()
@@ -124,10 +137,15 @@ const route = useRoute();
   watch(
   () => route.fullPath,
   async () => {
-    console.log("route fullPath updated: ", route.fullPath);
-    setFilterCompleted(route.fullPath.includes('completed=true')) // === '/?completed=true'
-  }
-  );
+    console.log("Main route fullPath updated: ", route.fullPath);
+    setFilterCompleted(route.fullPath.includes('completed=true'))
+
+    if (route.fullPath === '/' || route.fullPath.includes('completed=true')) {
+      setSelectedId(null)
+      showDetail.value = false
+      updateShowAddButton(true)
+    }
+  });
 
   onMounted((): void => {
     axios
@@ -155,7 +173,21 @@ const route = useRoute();
 
 </script>
 
+<style>
+a {
+  color: black;
+  padding: 0;
+}
+a:hover {
+  background-color: unset;
+}
+</style>
+
 <style scoped>
+
+a {
+  cursor: pointer;
+}
 .main-container {
   width: 100%;
   position: absolute;

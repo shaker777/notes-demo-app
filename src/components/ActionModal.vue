@@ -10,10 +10,10 @@
                   class="close-button"/>
       </div>
       <div v-if="actionMode === 2">
-        <p class="message">{{capitalizeFirstLetter(getTodoById(selectedId).title)}}</p>
+        <p class="message">{{ selectedId ? capitalizeFirstLetter(getTodoById(selectedId).title) : '' }}</p>
       </div>
       <div v-else>
-        <NoteContent :title="newTodoTitle" :completed="newTodoCompleted"/>
+        <NoteContent/>
       </div>
       <div class="footer">
         <TextButton :title="actionTitle"
@@ -37,7 +37,7 @@ import useSettings from "@/hooks/useSettings";
 import capitalizeFirstLetter from "@/utilities/utilities";
 import NoteContent from "@/components/NoteContent.vue";
 const { actionMode } = useSettings()
-const { addTodo, newTodoTitle, newTodoCompleted, valid, removeTodo, selectedId, getTodoById } = useTodos()
+const { valid, selectedId, getTodoById } = useTodos()
 
 defineProps<{
   title: string,
@@ -96,6 +96,8 @@ defineProps<{
 .close-button {
   margin: auto;
   margin-right: 0;
+  overflow: hidden;
+  border-radius: 50%;
 }
 
 .footer {

@@ -4,8 +4,6 @@ import {useTodoStore} from '@/stores/todo'
 
 export default function useTodos() {
     const store = useTodoStore()
-    //const newTodoTitle = ref<string>('')
-    //const newTodoCompleted = ref<boolean>(false)
 
     const newTodoTitle = computed(() => store.getNewTodoTitle)
     const setNewTodoTitle = (value:string): void => {
@@ -52,6 +50,8 @@ export default function useTodos() {
 
     const updateTodo = (todo: TodoModel): void => {
         store.updateTodo(todo)
+        setNewTodoTitle('')
+        setNewTodoCompleted(false)
     }
 
     const setTodos = (todos: TodoModel[]): void => {
@@ -62,8 +62,7 @@ export default function useTodos() {
         store.updateTodoDone({id: id, done: done})
     }
 
-    const getTodoById = (id: number | null): TodoModel => {
-        if (!id) {return }
+    const getTodoById = (id: number): TodoModel => {
         store.getTodoById(id)
         const todo: TodoModel | null = store.getTodo
 

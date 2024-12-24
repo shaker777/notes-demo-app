@@ -1,16 +1,17 @@
 <template>
   <header id="header">
     <div>
-      <IconButton icon="info"
+      <IconButton icon="snowflake"
                   :dark="false"
                   @click="updateShowFooter"/>
     </div>
     <h1 class="title">{{title}}</h1>
-    <div>
+    <div v-if="showAddButton">
       <IconButton icon="plus"
                   :dark="false"
                   @click="showAddNoteModal"/>
     </div>
+    <div style="width: 30px; height: 30px;" v-else/>
   </header>
 </template>
 
@@ -23,7 +24,7 @@ import IconButton from "./IconButton.vue"
     showAddNoteModal:() => void
   }>()
 
-const { updateShowFooter } = useSettings();
+const { updateShowFooter, showAddButton } = useSettings();
 
 </script>
 

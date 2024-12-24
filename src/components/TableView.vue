@@ -7,11 +7,12 @@
         v-for="(header, i) in headers"
         :key="`${header}${i}`"
         :class="i=== 2 ? 'header-item-cell header-item-filter' : 'header-item-cell'"
-        @click="toogleFilter"
         >
-          <div v-if="i === 2" :class="filterCompleted ? 'filter-active flexContainer filter-container' : 'flexContainer filter-container'">
-            <p class="header-item-text">{{ header }}</p>
-            <font-awesome-icon icon="filter" class="filter-icon"/>
+          <div v-if="i === 2" :class="filterCompleted ? 'filter-active flexContainer' : 'flexContainer'">
+            <router-link :to="filterCompleted ? {name: 'home'} : {name: 'filtered', query: {completed: !filterCompleted}}" class="flexContainer">
+              <p class="header-item-text">{{ header }}</p>
+              <font-awesome-icon icon="filter" class="filter-icon"/>
+            </router-link>
           </div>
           <p class="header-item-text" v-else>{{ header }}</p>
         </th>
@@ -64,7 +65,6 @@
     headers: string[],
     data: TodoModel[],
     filterCompleted: boolean | null,
-    toogleFilter:() => void,
     deleteItem:(todoId:number) => void,
     editItem:(todoId:number) => void,
     checkItem:(todo:TodoModel) => void
@@ -136,6 +136,7 @@ td {
 .custom-checkbox {
   accent-color: rgb(45, 196, 143);
   cursor: pointer;
+  z-index: 10;
 }
 
 .buttonsContainer {
@@ -143,6 +144,7 @@ td {
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
+  z-index: 10;
 }
 .action-button {
   margin-right: 10px;
@@ -155,9 +157,6 @@ td {
   align-items: center;
 }
 
-.filter-container {
-
-}
 .filter-icon {
   font-size: 10px;
 }

@@ -11,6 +11,12 @@ export default function useSettings() {
         store.toggleShowFooter()
     }
 
+    const showAddButton = computed(() => store.getShowAddButton)
+
+    const updateShowAddButton = (value: boolean): void => {
+        store.setShowAddButton(value)
+    }
+
     const filterCompleted = computed(() => store.getFilterCompleted)
 
     const updateFilterCompleted = (): void => {
@@ -30,6 +36,8 @@ export default function useSettings() {
     return {
         showFooter,
         updateShowFooter,
+        showAddButton,
+        updateShowAddButton,
         filterCompleted,
         updateFilterCompleted,
         setFilterCompleted,
