@@ -9,7 +9,7 @@
         :class="i=== 2 ? 'header-item-cell header-item-filter' : 'header-item-cell'"
         >
           <div v-if="i === 2" :class="filterCompleted ? 'filter-active flexContainer' : 'flexContainer'">
-            <router-link :to="filterCompleted ? {name: 'home'} : {name: 'filtered', query: {completed: !filterCompleted}}" class="flexContainer">
+            <router-link :to="filterCompleted ? {name: 'home'} : {name: 'filtered', query: {'completed': 'true'}}" class="flexContainer">
               <p class="header-item-text">{{ header }}</p>
               <font-awesome-icon icon="filter" class="filter-icon"/>
             </router-link>
