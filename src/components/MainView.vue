@@ -96,7 +96,6 @@ function onDone() {
     const selected = getTodoById(selectedId.value)
     const data = {id : selected.id, title: newTodoTitle.value, completed: newTodoCompleted.value}
     const todo = new TodoModel(data)
-    console.log(todo)
     updateTodo(todo)
     showEditModal.value = false
     setSelectedId(null)
@@ -123,7 +122,6 @@ function onDone() {
   function handleAction() {
     switch (actionMode.value) {
       case ActionMode.Update:
-        console.log('UPDATE!');
         onDone()
         break;
       case ActionMode.Delete:
@@ -137,7 +135,7 @@ function onDone() {
   watch(
   () => route.fullPath,
   async () => {
-    console.log("Main route fullPath updated: ", route.fullPath);
+    // console.log("Main route fullPath updated: ", route.fullPath);
     setFilterCompleted(route.fullPath.includes('completed=true'))
 
     if (route.fullPath === '/' || route.fullPath.includes('completed=true')) {

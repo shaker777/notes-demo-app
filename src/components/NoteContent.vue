@@ -19,28 +19,20 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 import capitalizeFirstLetter from "@/utilities/utilities";
-import useSettings from "@/hooks/useSettings";
 import useTodos from "@/hooks/useTodos";
 
 const { newTodoTitle, setNewTodoTitle,newTodoCompleted, setNewTodoCompleted, selectedId, getTodoById } = useTodos()
 
-const _todoTitle = ref<string>(selectedId.value ? capitalizeFirstLetter(getTodoById(selectedId.value).title) : newTodoTitle)
+const _todoTitle = ref<string>(selectedId.value ? capitalizeFirstLetter(getTodoById(selectedId.value).title) : newTodoTitle.value)
 const _todoCompleted = ref<boolean>(selectedId.value ? getTodoById(selectedId.value).completed : false)
 
 function handleTitleChange() {
-  //if (actionMode.value === ActionMode.Create) {
     setNewTodoTitle(_todoTitle.value)
-  //} else {
-  //  console.log('update title')
-  //}
 }
 
 function handleCompletedChange() {
-  //if (actionMode.value === ActionMode.Create) {
-    setNewTodoCompleted(_todoCompleted.value)
-  //} else {
-  //  console.log('update completed')
-  //}
+  setNewTodoCompleted(!_todoCompleted.value)
+  handleTitleChange()
 }
 
 function validateInputLenght(value: string | undefined): boolean | string {
