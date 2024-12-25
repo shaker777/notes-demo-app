@@ -10,7 +10,7 @@ const router = createRouter({
       component: MainView,
         children: [
             {
-                path: 'note/:id(\\d+)',
+                path: 'note/:title(\\d+)',
                 name: 'note_detail',
                 component: (): Promise<any> => import('@/components/NoteView.vue')
             },

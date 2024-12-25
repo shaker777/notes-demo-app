@@ -16,7 +16,7 @@
         :edit-item="handleEditAction"
         v-else>
           <template #column1="{ entity }">
-            <router-link :to="{name: 'note_detail', params: { id: entity.id }}" active-class="">
+            <router-link :to="{name: 'note_detail', params: { title: entity.title.replace(/\s/g, '-') }}" active-class="">
               <div @click="onClickNote(entity.id)">
             {{ capitalizeFirstLetter(entity.title) }}
               </div>
