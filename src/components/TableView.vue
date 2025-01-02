@@ -19,6 +19,7 @@
       </tr>
       </thead>
       <tbody>
+      <TransitionGroup name="list">
         <tr
         v-for="(entity, index) in data"
         :key="`entity-${entity.id}`"
@@ -52,6 +53,7 @@
             </div>
           </td>
         </tr>
+      </TransitionGroup>
       </tbody>
     </table>
   </div>
@@ -159,6 +161,16 @@ td {
 
 .filter-icon {
   font-size: 10px;
+}
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.2s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(15px);
 }
 
 </style>

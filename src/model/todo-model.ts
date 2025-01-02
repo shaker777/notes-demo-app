@@ -1,5 +1,5 @@
 export class TodoModel {
-    public id: number;
+    public id: string;
     public title: string;
     public completed: boolean;
     constructor(item: any) {

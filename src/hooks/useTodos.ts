@@ -1,6 +1,7 @@
 import {ref, computed} from 'vue'
 import {TodoModel} from '@/model/todo-model'
 import {useTodoStore} from '@/stores/todo'
+import { v4 as uuidv4 } from "uuid";
 
 export default function useTodos() {
     const store = useTodoStore()
@@ -21,13 +22,8 @@ export default function useTodos() {
 
     const todosCompeted = computed(() => store.getTodos.filter(item => item.completed))
 
-    const getNewId = (): number => {
-        const todosSlice = store.getTodos.slice(-1)
-        if (todosSlice.length > 0) {
-            return store.getTodos.slice(-1)[0]['id'] + 1
-        }
-
-        return 1
+    const getNewId = (): string => {
+        return uuidv4()
     }
 
     const addTodo = (): void => {
@@ -58,11 +54,11 @@ export default function useTodos() {
         store.setTodos(todos)
     }
 
-    const updateTodoDone = (id: number, done: boolean): void => {
+    const updateTodoDone = (id: string, done: boolean): void => {
         store.updateTodoDone({id: id, done: done})
     }
 
-    const getTodoById = (id: number): TodoModel => {
+    const getTodoById = (id: string): TodoModel => {
         store.getTodoById(id)
         const todo: TodoModel | null = store.getTodo
 
@@ -74,7 +70,7 @@ export default function useTodos() {
 
     const selectedId = computed(() => store.getSelectedId)
 
-    const setSelectedId = (value:number | null): void => {
+    const setSelectedId = (value:string | null): void => {
         store.setSelectedId(value)
     }
 

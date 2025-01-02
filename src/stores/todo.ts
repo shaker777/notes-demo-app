@@ -2,6 +2,7 @@ import type {TodoState} from './type/todo'
 import {TodoModel} from '@/model/todo-model'
 import {defineStore} from 'pinia'
 import {computed, reactive} from 'vue'
+import { v4 as uuidv4 } from "uuid";
 
 export const useTodoStore = defineStore('todo', () => {
     const state = reactive<TodoState>({
@@ -14,9 +15,9 @@ export const useTodoStore = defineStore('todo', () => {
 
     const getTodo = computed((): TodoModel | null => state.todo)
     const getTodos = computed((): TodoModel[] => state.todos)
-    const getNewId = computed((): number => state.todos.slice(-1)[0]['id'] + 1)
+    const getNewId = computed((): string => uuidv4())
 
-    const getTodoById = (todoModelId: number): void => {
+    const getTodoById = (todoModelId: string): void => {
         const todo: TodoModel | undefined = state.todos.find((t: TodoModel): boolean => t.id === todoModelId)
         if (!todo) {
             return
@@ -46,14 +47,14 @@ export const useTodoStore = defineStore('todo', () => {
         const index = state.todos.findIndex(todo => todo.id === todoModel.id)
         state.todos[index] = todoModel
     }
-    const updateTodoDone = (todoModel: { id: number; done: boolean }): void => {
+    const updateTodoDone = (todoModel: { id: string; done: boolean }): void => {
         const index = state.todos.findIndex(todo => todo.id === todoModel.id)
         state.todos[index].completed = todoModel.done
     }
 
-    const getSelectedId = computed((): number | null => state.selectedId)
+    const getSelectedId = computed((): string | null => state.selectedId)
 
-    function setSelectedId(value:number | null): void {
+    function setSelectedId(value:string | null): void {
         state.selectedId = value
     }
 

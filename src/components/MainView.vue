@@ -54,6 +54,7 @@ import ActionModal from "./ActionModal.vue";
 import {useRoute} from "vue-router";
 import capitalizeFirstLetter from "@/utilities/utilities";
 import NoteView from "@/components/NoteView.vue";
+import { v4 as uuidv4 } from "uuid";
 
   const route = useRoute();
 
@@ -69,13 +70,13 @@ import NoteView from "@/components/NoteView.vue";
   const showDeleteModal = ref<boolean>(false)
   const showDetail = ref<boolean>(false)
 
-  function onClickNote(id: number) {
+  function onClickNote(id: string) {
     setSelectedId(id)
     updateShowAddButton(false)
     showDetail.value = true
   }
 
-  function handleDeleteAction(id: number) {
+  function handleDeleteAction(id: string) {
     setSelectedId(id)
     setActionMode(ActionMode.Delete)
     showDeleteModal.value = true
@@ -85,7 +86,7 @@ import NoteView from "@/components/NoteView.vue";
     updateTodoDone(todo.id, todo.completed)
   }
 
-  function handleEditAction(id: number) {
+  function handleEditAction(id: string) {
     setSelectedId(id)
     setActionMode(ActionMode.Update)
     showEditModal.value = true
@@ -116,6 +117,7 @@ function onDone() {
     if (selectedId.value) {
       removeTodo(selectedId.value)
       showDeleteModal.value = false
+      setSelectedId(null)
     }
   }
 
@@ -151,7 +153,10 @@ function onDone() {
     .then(async (response): Promise<void | null> => {
         processInformation.value = 'Данные загружены!'
 
-      const td = response.data.map((item:any) => {return new TodoModel(item)})
+      const td = response.data.map((item:any) => {
+        item.id = uuidv4()
+        return new TodoModel(item)}
+      )
       setTodos(td)
       if (route.fullPath === '/?completed=true') {
         updateFilterCompleted()

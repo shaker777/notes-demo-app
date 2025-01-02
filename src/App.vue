@@ -22,7 +22,7 @@ import useTodos from "@/hooks/useTodos";
 const route = useRoute();
 
 const { showFooter, actionMode, setActionMode } = useSettings();
-const { addTodo, valid } = useTodos()
+const { addTodo, valid, setSelectedId } = useTodos()
 
 const title:string = `Vue Notes SPA ${__APP_VERSION__} Новогоднее издание`
 
@@ -35,6 +35,7 @@ function handleShowAddModal () {
 
 function handleCloseAddModal() {
   showAddModal.value = false
+  setSelectedId(null)
 }
 
 function handleAction() {
