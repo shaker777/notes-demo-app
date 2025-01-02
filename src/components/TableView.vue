@@ -67,8 +67,8 @@
     headers: string[],
     data: TodoModel[],
     filterCompleted: boolean | null,
-    deleteItem:(todoId:number) => void,
-    editItem:(todoId:number) => void,
+    deleteItem:(todoId:string) => void,
+    editItem:(todoId:string) => void,
     checkItem:(todo:TodoModel) => void
   }>()
 

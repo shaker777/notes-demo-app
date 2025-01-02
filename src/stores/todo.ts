@@ -38,7 +38,7 @@ export const useTodoStore = defineStore('todo', () => {
         state.todos = todos
     }
 
-    const removeTodo = (todoModelId: number): void => {
+    const removeTodo = (todoModelId: string): void => {
         const index = state.todos.findIndex(todo => todo.id === todoModelId)
         state.todos.splice(index, 1)
     }

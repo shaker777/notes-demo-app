@@ -38,7 +38,7 @@ export default function useTodos() {
         setNewTodoCompleted(false)
     }
 
-    const removeTodo = (id: number | undefined): void => {
+    const removeTodo = (id: string | undefined): void => {
         if (id) {
             store.removeTodo(id)
         }
