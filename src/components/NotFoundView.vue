@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <h3>Нет такой заметки :(</h3>
+    <h1>Ничего не найдено :(</h1>
+    <router-link :to="{name: 'home'}">
+      <label class="back-link">к списку заметок</label>
+    </router-link>
   </div>
 </template>
 
@@ -8,12 +11,11 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   height: 100vh;
+  flex-direction: column;
+  @include center
 }
 </style>

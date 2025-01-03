@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <label id="back-link" @click="$router.back()">< к списку</label>
+    <label class="back-link" @click="$router.back()">< к списку</label>
     <label id="title"> {{ title }}</label>
     <div id="status-container">
       <label id="status-label">Статус:</label>
@@ -31,16 +31,6 @@ defineProps<{
     display: flex;
     flex-direction: column;
     padding: 20px;
-  }
-
-  #back-link {
-    font-size: 1.2rem;
-    color: #00bd7e;
-    cursor: pointer;
-  }
-
-  #back-link:hover {
-    opacity: 0.75;
   }
 
   #title {

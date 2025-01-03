@@ -89,4 +89,14 @@ async () => {
   opacity: 0;
 }
 
+.back-link {
+  font-size: 1.2rem;
+  color: #00bd7e;
+  cursor: pointer;
+}
+
+.back-link:hover {
+  opacity: 0.75;
+}
+
 </style>
