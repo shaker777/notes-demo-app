@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '@/components/MainView.vue'
+import NoteView from "@/components/NoteView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +13,7 @@ const router = createRouter({
             {
                 path: 'note/:title(\\d+)',
                 name: 'note_detail',
-                component: (): Promise<any> => import('@/components/NoteView.vue')
+                component: NoteView
             },
             {
                 path: '/',
