@@ -28,9 +28,9 @@ const { updateShowFooter, showAddButton } = useSettings();
 
 </script>
 
-<style>
+<style scoped lang="scss">
 #header {
-  background: rgb(45, 196, 143);
+  background: $primary-color;
   color: #fff;
   padding: 1rem;
   width: 100%;

@@ -10,6 +10,16 @@ export default defineConfig({
     vue(),
     vueDevTools(),
   ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `
+          @import "@/scss/_variables.scss";
+          @import "@/scss/_mixins.scss";
+        `
+            }
+        }
+    },
     base: "/notes-demo-app/",
     define: {
         '__APP_VERSION__': JSON.stringify(process.env.npm_package_version),

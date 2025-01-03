@@ -50,7 +50,7 @@ function validateInputLenght(value: string | undefined): boolean | string {
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .content-wrapper {
   display: flex;
   flex-direction: column;
@@ -91,7 +91,7 @@ function validateInputLenght(value: string | undefined): boolean | string {
 }
 
 .custom-checkbox {
-  accent-color: rgb(45, 196, 143);
+  accent-color: $primary-color;
   cursor: pointer;
 }
 

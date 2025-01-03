@@ -74,7 +74,7 @@
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 table {
   border-collapse: collapse;
   width: 100vw;
@@ -136,7 +136,7 @@ td {
 }
 
 .custom-checkbox {
-  accent-color: rgb(45, 196, 143);
+  accent-color: $primary-color;
   cursor: pointer;
   z-index: 10;
 }

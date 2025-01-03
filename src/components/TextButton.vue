@@ -11,7 +11,7 @@ defineProps<{
 }>()
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .button {
   font-size: 1rem;
   border-radius: 0.5rem;
@@ -30,10 +30,10 @@ defineProps<{
 
 .done {
   color: white;
-  background-color: rgb(45, 196, 143);
+  background-color: $primary-color;
 }
 .destructive {
   color: white;
-  background-color: rgb(180 17 17);
+  background-color: $red-color;
 }
 </style>
