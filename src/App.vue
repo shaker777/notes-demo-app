@@ -1,12 +1,16 @@
 <template>
   <HeaderView title="Мои заметки" :show-add-note-modal="handleShowAddModal"/>
   <RouterView />
-  <FooterView v-if="showFooter" :title="title"/>
-  <ActionModal  v-if="showAddModal === true"
+  <Transition name="footer">
+    <FooterView v-if="showFooter" :title="title"/>
+  </Transition>
+  <Transition name="action">
+    <ActionModal  v-if="showAddModal === true"
                 title="Создать заметку"
                 action-title="Создать"
                 :on-action="handleAction"
                 :on-close="handleCloseAddModal"/>
+  </Transition>
 </template>
 
 <script setup lang="ts">
@@ -59,5 +63,30 @@ async () => {
 </script>
 
 <style scoped>
+
+.footer-enter-active,
+.footer-leave-active {
+  transition: all 0.25s ease;
+}
+
+.footer-enter-from,
+.footer-leave-to {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+</style>
+
+<style>
+
+.action-enter-active,
+.action-leave-active {
+  transition: all 0.25s ease;
+}
+
+.action-enter-from,
+.action-leave-to {
+  opacity: 0;
+}
 
 </style>

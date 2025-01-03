@@ -23,21 +23,27 @@
             </router-link>
           </template>
         </table-view>
-        <ActionModal  v-if="showEditModal === true"
+        <Transition name="action">
+          <ActionModal  v-if="showEditModal === true"
                       title="Редактирование"
                       action-title="Сохранить"
                       :on-action="handleAction"
                       :on-close="handleCloseEditModal"/>
-        <ActionModal  v-if="showDeleteModal === true"
+        </Transition>
+        <Transition name="action">
+          <ActionModal  v-if="showDeleteModal === true"
                       title="Удаление"
                       action-title="Удалить"
                       :on-action="handleAction"
                       :on-close="handleCloseDeleteModal"/>
+        </Transition>
       </div>
     </div>
+    <Transition name="detail">
     <NoteView v-if="showDetail"
               :title="selectedId ? capitalizeFirstLetter(getTodoById(selectedId).title) : ''"
               :completed="selectedId ? getTodoById(selectedId).completed : false"/>
+    </Transition>
   </main>
 </template>
 
@@ -210,6 +216,18 @@ a {
 #process-information {
   padding-top: 30px;
   text-align: center;
+}
+
+
+.detail-enter-active,
+.detail-leave-active {
+  transition: all 0.25s ease;
+}
+
+.detail-enter-from,
+.detail-leave-to {
+  opacity: 0;
+  transform: translateX(500px);
 }
 
 </style>
