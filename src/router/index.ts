@@ -3,7 +3,7 @@ import MainView from '@/components/MainView.vue'
 import NoteView from "@/components/NoteView.vue";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/notes-demo-app'),
   routes: [
     {
       path: '/',
