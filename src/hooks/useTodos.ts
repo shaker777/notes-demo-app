@@ -50,8 +50,12 @@ export default function useTodos() {
         setNewTodoCompleted(false)
     }
 
-    const setTodos = (todos: TodoModel[]): void => {
-        store.setTodos(todos)
+    const setTodos = (data: any[]): void => {
+        const tds = data.map((item:any) => {
+            item.id = uuidv4()
+            return new TodoModel(item)}
+        )
+        store.setTodos(tds)
     }
 
     const updateTodoDone = (id: string, done: boolean): void => {

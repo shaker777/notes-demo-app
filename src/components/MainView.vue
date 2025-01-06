@@ -2,14 +2,10 @@
   <main :class="showFooter ? 'main-container withFooter' : 'main-container noFooter'">
     <div>
       <div>
-        <div v-if="isLoading === true">
-          <p id="process-information">
-            {{ processInformation }}
-          </p>
-        </div>
+        <h3 id="process-information" v-if="error">{{ error }}</h3>
         <table-view
         :headers="headers"
-        :data="filterCompleted? todosCompeted: todos"
+        :data="filterCompleted ? todosCompeted : todos"
         :filterCompleted="filterCompleted"
         :delete-item="handleDeleteAction"
         :check-item="handleDoneAction"
@@ -48,33 +44,31 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
-import router from '@/router'
-import {onMounted, ref, watch} from 'vue'
-import {TodoModel} from "@/model/todo-model";
+import { ref, watch } from 'vue'
+import { TodoModel } from "@/model/todo-model";
 import useSettings from '@/hooks/useSettings'
 import useTodos from '@/hooks/useTodos'
 import TableView from "./TableView.vue";
 import ActionMode from "@/types/enum"
 import ActionModal from "./ActionModal.vue";
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 import capitalizeFirstLetter from "@/utilities/utilities";
 import NoteView from "@/components/NoteView.vue";
-import { v4 as uuidv4 } from "uuid";
+import { useApi } from '@/hooks/useApi.js'
 
   const route = useRoute();
 
   const { showFooter, updateShowAddButton, filterCompleted, updateFilterCompleted, setFilterCompleted, actionMode, setActionMode } = useSettings();
-  const isLoading = ref<boolean>(true)
-  const processInformation = ref<string>('Загрузка данных...')
   const { todos, getTodoById, todosCompeted, setTodos, removeTodo, updateTodoDone, updateTodo, selectedId, setSelectedId, newTodoTitle, newTodoCompleted } = useTodos();
-  const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
 
   const headers:string[] = ['№', 'Заметка','Сделано', '']
 
   const showEditModal = ref<boolean>(false)
   const showDeleteModal = ref<boolean>(false)
   const showDetail = ref<boolean>(false)
+
+  const apiUrl = 'https://jsonplaceholder.typicode.com/todos'
+  const { data, error } = useApi(apiUrl)
 
   function onClickNote(id: string) {
     setSelectedId(id)
@@ -98,16 +92,16 @@ import { v4 as uuidv4 } from "uuid";
     showEditModal.value = true
   }
 
-function onDone() {
-  if (selectedId.value) {
-    const selected = getTodoById(selectedId.value)
-    const data = {id : selected.id, title: newTodoTitle.value, completed: newTodoCompleted.value}
-    const todo = new TodoModel(data)
-    updateTodo(todo)
-    showEditModal.value = false
-    setSelectedId(null)
+  function onDone() {
+    if (selectedId.value) {
+      const selected = getTodoById(selectedId.value)
+      const data = {id : selected.id, title: newTodoTitle.value, completed: newTodoCompleted.value}
+      const todo = new TodoModel(data)
+      updateTodo(todo)
+      showEditModal.value = false
+      setSelectedId(null)
+    }
   }
-}
 
   function handleCloseEditModal() {
     showEditModal.value = false
@@ -153,31 +147,13 @@ function onDone() {
     }
   });
 
-  onMounted((): void => {
-    axios
-    .get(apiUrl)
-    .then(async (response): Promise<void | null> => {
-        processInformation.value = 'Данные загружены!'
+  watch(
+  () => data.value, async () => {
+    setTodos(data.value)
 
-      const td = response.data.map((item:any) => {
-        item.id = uuidv4()
-        return new TodoModel(item)}
-      )
-      setTodos(td)
-      if (route.fullPath === '/?completed=true') {
-        updateFilterCompleted()
-      }
-    })
-    .then(async (): Promise<void | null> => {
-        processInformation.value = 'Обработка данных'
-    })
-    .then((): void => {
-        isLoading.value = false
-    })
-    .catch(error => {
-      console.log(error)
-      processInformation.value = `Не удалось загрузить заметки. Ошибка: ${error.message}`
-    })
+    if (route.fullPath === '/?completed=true') {
+      updateFilterCompleted()
+    }
   })
 
 </script>
