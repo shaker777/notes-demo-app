@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import { ref } from 'vue'
 
-export function useApi(url) {
+export function useApi(url:any) {
     const data = ref(null)
     const error = ref('Загрузка данных...')
 
@@ -12,6 +12,7 @@ export function useApi(url) {
         .get(url)
         .then(async (response): Promise<void | null> => {
             data.value = response.data
+            //@ts-ignore
             error.value = null
         })
         .catch(err => {

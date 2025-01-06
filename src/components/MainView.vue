@@ -149,7 +149,9 @@ import { useApi } from '@/hooks/useApi.js'
 
   watch(
   () => data.value, async () => {
-    setTodos(data.value)
+    if (data.value !== null) {
+      setTodos(data.value)
+    }
 
     if (route.fullPath === '/?completed=true') {
       updateFilterCompleted()
