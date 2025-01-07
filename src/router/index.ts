@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
 import MainView from '@/components/MainView.vue'
 import NoteView from "@/components/NoteView.vue";
 
 const router = createRouter({
-  history: createWebHistory('/notes-demo-app'),
+  history: createWebHashHistory('/notes-demo-app'),
   routes: [
     {
       path: '/',
