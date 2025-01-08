@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <label class="back-link" @click="$router.back()">< к списку</label>
+    <router-link :to="{name: 'home'}">
+    <label class="back-link">< к списку</label>
+    </router-link>
     <label id="title"> {{ title }}</label>
     <div id="status-container">
       <label id="status-label">Статус:</label>
