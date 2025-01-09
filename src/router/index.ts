@@ -11,7 +11,7 @@ const router = createRouter({
       component: MainView,
         children: [
             {
-                path: 'note/:title(\\d+)',
+                path: 'note/:id/:title(\\d+)',
                 name: 'note_detail',
                 component: NoteView
             },
@@ -19,14 +19,21 @@ const router = createRouter({
                 path: '/',
                 name: 'filtered',
                 component: MainView
+            },
+            {
+                path: '/',
+                name: 'not_found',
+                // @ts-ignore’
+                component: (): Promise<any> => import('@/components/NotFoundView.vue')
             }
         ]
     },
     {
         path: '/:pathMatch(.*)*',
-        name: 'NotFound',
+        name: 'any',
+        component: MainView
         // @ts-ignore’
-      component: (): Promise<any> => import('@/components/NotFoundView.vue'),
+        // component: (): Promise<any> => import('@/components/NotFoundView.vue'),
     },
   ],
     linkActiveClass: '',

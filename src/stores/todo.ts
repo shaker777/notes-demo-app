@@ -18,7 +18,7 @@ export const useTodoStore = defineStore('todo', () => {
     const getNewId = computed((): string => uuidv4())
 
     const getTodoById = (todoModelId: string): void => {
-        const todo: TodoModel | undefined = state.todos.find((t: TodoModel): boolean => t.id === todoModelId)
+        const todo: TodoModel | undefined = state.todos.find((t: TodoModel): boolean => t.id == todoModelId)
         if (!todo) {
             return
         }

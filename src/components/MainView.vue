@@ -12,7 +12,7 @@
         :edit-item="handleEditAction"
         v-else>
           <template #column1="{ entity }">
-            <router-link :to="{name: 'note_detail', params: { title: entity.title.replace(/\s/g, '-') }}" active-class="">
+            <router-link :to="{name: 'note_detail', params: { id: entity.id, title: entity.title.replace(/\s/g, '-') }}" active-class="">
               <div @click="onClickNote(entity.id)">
             {{ capitalizeFirstLetter(entity.title) }}
               </div>
@@ -37,14 +37,14 @@
     </div>
     <Transition name="detail">
     <NoteView v-if="showDetail"
-              :title="selectedId ? capitalizeFirstLetter(getTodoById(selectedId).title) : ''"
-              :completed="selectedId ? getTodoById(selectedId).completed : false"/>
+              :title="(selectedId && getTodoById(selectedId)) ? capitalizeFirstLetter(getTodoById(selectedId).title) : ''"
+              :completed="(selectedId && getTodoById(selectedId)) ? getTodoById(selectedId).completed : false"/>
     </Transition>
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, watchEffect } from 'vue'
 import { TodoModel } from "@/model/todo-model";
 import useSettings from '@/hooks/useSettings'
 import useTodos from '@/hooks/useTodos'
@@ -55,6 +55,7 @@ import { useRoute } from "vue-router";
 import capitalizeFirstLetter from "@/utilities/utilities";
 import NoteView from "@/components/NoteView.vue";
 import { useApi } from '@/hooks/useApi.js'
+import router from "@/router";
 
   const route = useRoute();
 
@@ -72,6 +73,9 @@ import { useApi } from '@/hooks/useApi.js'
 
   function onClickNote(id: string) {
     setSelectedId(id)
+    showNote()
+  }
+  function showNote() {
     updateShowAddButton(false)
     showDetail.value = true
   }
@@ -134,16 +138,22 @@ import { useApi } from '@/hooks/useApi.js'
     }
   }
 
-  watch(
-  () => route.fullPath,
-  async () => {
-    // console.log("Main route fullPath updated: ", route.fullPath);
+  watchEffect(() => {
+    console.log("Main route fullPath: ", route.fullPath);
+    console.log("Main route name: ", route.name);
     setFilterCompleted(route.fullPath.includes('completed=true'))
 
     if (route.fullPath === '/' || route.fullPath.includes('completed=true')) {
       setSelectedId(null)
       showDetail.value = false
       updateShowAddButton(true)
+    }
+
+    if (route.name === 'any' && route.fullPath.startsWith('/note/')) {
+      console.log('need show note');
+      const id = route.fullPath.split('/')[2]
+      console.log(id);
+      setSelectedId(id)
     }
   });
 
@@ -156,7 +166,16 @@ import { useApi } from '@/hooks/useApi.js'
     if (route.fullPath === '/?completed=true') {
       updateFilterCompleted()
     }
-  })
+    if (selectedId.value !== null) {
+      if (getTodoById(selectedId.value)) {
+        showNote()
+      }
+      else {
+        console.log('show 404')
+        router.push('not_found')
+      }
+    }
+  }, {flush:'post'})
 
 </script>
 

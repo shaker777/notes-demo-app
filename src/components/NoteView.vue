@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <router-link :to="{name: 'home'}">
-    <label class="back-link">< к списку</label>
+      <label class="back-link">< к списку</label>
     </router-link>
     <label id="title"> {{ title }}</label>
     <div id="status-container">

@@ -52,7 +52,7 @@ export default function useTodos() {
 
     const setTodos = (data: any[]): void => {
         const tds = data.map((item:any) => {
-            item.id = uuidv4()
+            // item.id = uuidv4()
             return new TodoModel(item)}
         )
         store.setTodos(tds)
@@ -62,14 +62,9 @@ export default function useTodos() {
         store.updateTodoDone({id: id, done: done})
     }
 
-    const getTodoById = (id: string): TodoModel => {
+    const getTodoById = (id: string): TodoModel | null => {
         store.getTodoById(id)
-        const todo: TodoModel | null = store.getTodo
-
-        if (todo === null) {
-            throw Error('todo cant be null.')
-        }
-        return todo
+        return store.getTodo
     }
 
     const selectedId = computed(() => store.getSelectedId)
