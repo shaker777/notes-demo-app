@@ -28,7 +28,7 @@ const route = useRoute();
 const { showFooter, actionMode, setActionMode } = useSettings();
 const { addTodo, valid, setSelectedId } = useTodos()
 
-const title:string = `Vue Notes SPA ${__APP_VERSION__} Новогоднее издание`
+const title:string = `Vue Notes SPA ${__APP_VERSION__}`
 
 const showAddModal = ref<boolean>(false)
 
